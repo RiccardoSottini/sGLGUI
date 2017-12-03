@@ -1,0 +1,7 @@
+*.a
+*.so
+build/
+lib/
+bin/
+test/main
+test/a.out
