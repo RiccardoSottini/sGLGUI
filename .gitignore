@@ -3,5 +3,5 @@
 build/
 lib/
 bin/
-test/main
-test/a.out
+examples/main
+examples/a.out
