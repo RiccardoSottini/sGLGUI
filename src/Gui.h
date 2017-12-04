@@ -27,10 +27,9 @@ class Gui {
 		void Terminate();
 
 	    template<class C, class S, typename SLOT> void connect(C Class, S Signal, SLOT slot()) {
-			if(Signal.event == INPUT_EVENT) 
-				Class->slots[{Signal.event, Signal.type, Signal.signal, Signal.action}] = slot;
+			Class->slots[{Signal.type, Signal.signal, Signal.action}] = slot;
 
-			std::cerr << "Connect: " << Signal.event << "   " << Signal.type << "   " << Signal.signal << "   " << Signal.action << '\n';
+			std::cout << "Connect: " << Signal.type << "   " << Signal.signal << "   " << Signal.action << '\n';
 		}
 
 		static std::map<GLFWwindow*, Window*> glfw_windows;

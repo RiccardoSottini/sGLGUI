@@ -16,7 +16,7 @@ class Panel{
 		GLdouble x = 0, y = 0;
 		std::vector<Panel*> list{};
 
-		std::map<std::array<int, 4>, void(*)()> slots;
+		std::map<std::array<int, 3>, void(*)()> slots;
 };
 
 #endif

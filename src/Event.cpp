@@ -4,7 +4,6 @@ GLFWwindow* InputEvent::current_window;
 int InputEvent::n_events = 0;
 std::map<int, std::array<int, 3>>InputEvent::events;
 std::map<int, std::array<GLdouble, 2>> InputEvent::pos;
-int InputEvent::event = INPUT_EVENT;
 
 InputEvent::InputEvent(Gui* gui) : gui(gui) {
 }
@@ -49,9 +48,9 @@ void InputEvent::getEvents() {
     n_events = 0;
 }
 
-void InputEvent::setEvent(GLFWwindow* window, const int type, const int sign, const int action) {
+void InputEvent::setEvent(GLFWwindow* window, const int type, const int signal, const int action) {
 	current_window = window;
-	std::array<int, 3> value = {type, sign, action};
+	std::array<int, 3> value = {type, signal, action};
 	events[n_events++] = value;
 }
 

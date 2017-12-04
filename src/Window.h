@@ -29,7 +29,7 @@ class Window {
 		GLdouble Width, Height;
 		char* name = nullptr;
 
-		std::map<std::array<int, 4>, void(*)()> slots;
+		std::map<std::array<int, 3>, void(*)()> slots;
 };
 
 #endif
