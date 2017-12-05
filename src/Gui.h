@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include "Signal.h"
+#include "def.h"
 
 #include <GL/glew.h>
 

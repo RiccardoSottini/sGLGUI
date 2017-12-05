@@ -20,12 +20,12 @@ int main() {
 	Window w(&gui, 500, 500, "Window");
 	Window w2(&gui, 300, 300, "Window2");
 
-	gui.connect(&w, Signal(INPUT_KEY, GLFW_KEY_E, GLFW_PRESS), &e_key);
+	gui.connect(&w, Signal(INPUT_KEY, KEY_E, PRESS), &e_key);
 	gui.connect(&w, Signal(INPUT_CHAR, 'a'), &e_char);
-	gui.connect(&w.windowPanel, Signal(INPUT_CURSORPOS), &e_cursorpos);
-	gui.connect(&w, Signal(INPUT_CURSORENTER, INPUT_CURSOR_ENTERED), &e_cursorenter);
-    gui.connect(&w.windowPanel, Signal(INPUT_MOUSEBUTTON, GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS), &e_mousebutton);
-    gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
+	gui.connect(&w.windowPanel, Signal(INPUT_CURSOR_POS), &e_cursorpos);
+	gui.connect(&w, Signal(INPUT_CURSOR_ENTER, INPUT_CURSOR_ENTERED), &e_cursorenter);
+	gui.connect(&w.windowPanel, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
+	gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
 	auto EventLoop = std::async(std::launch::async, &Gui::EventLoop, &gui);
 	gui.eventLoopThread = std::move(EventLoop);
