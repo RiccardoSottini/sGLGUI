@@ -22,7 +22,7 @@ void InputEvent::getEvents() {
 					std::cout << "INPUT_CHAR: " << value->second[1] << '\n';
 					break;
 				case INPUT_CURSOR_POS:
-					execSlot(gui->glfw_windows[current_window]->getPanelClicked(&gui->glfw_windows[current_window]->windowPanel, pos[n_ev][0], pos[n_ev][1]), n_ev);
+					execSlot(gui->glfw_windows[current_window]->getPanelClicked(gui->glfw_windows[current_window]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), n_ev);
 					std::cout << "INPUT_CURSOR_POS: " << pos[n_ev][0] << "   " << pos[n_ev][1] << '\n';
 					break;
 				case INPUT_CURSOR_ENTER:
@@ -30,7 +30,7 @@ void InputEvent::getEvents() {
 					std::cout << "INPUT_CURSOR_ENTER: " << value->second[1] << '\n';
 					break;
 				case INPUT_MOUSE_BUTTON:
-					execSlot(gui->glfw_windows[current_window]->getPanelClicked(&gui->glfw_windows[current_window]->windowPanel, pos[n_ev][0], pos[n_ev][1]), n_ev);
+					execSlot(gui->glfw_windows[current_window]->getPanelClicked(gui->glfw_windows[current_window]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), n_ev);
 					std::cout << "INPUT_MOUSE_BUTTON: " << pos[n_ev][0] << "   " << pos[n_ev][1] << "   " << value->second[1] << "   " << value->second[2] << '\n';
 					break;
 				case INPUT_SCROLL:

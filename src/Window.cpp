@@ -13,13 +13,6 @@ Window::Window(Gui* gui, const double Width, const double Height, const char* na
 	glfwMakeContextCurrent(this->window);
 }
 
-Window::~Window() {
-}
-
-GLFWwindow* Window::getWindow() {
-	return this->window;
-}
-
 void Window::setSize(const double Width, const double Height) {
 	this->Width = Width;
 	this->Height = Height;
@@ -31,15 +24,31 @@ void Window::addPanel(Panel* panel) {
 	this->windowPanel.addPanel(panel);
 }
 
+GLFWwindow* Window::getWindow() {
+	return this->window;
+}
+
+Panel* Window::getWindowPanel() {
+	return &windowPanel;
+}
+
 Panel* Window::getPanelClicked(Panel* panel, const double posX, const double posY) {
 	for(int i = panel->list.size() - 1; i >= 0; i--) {
 		Panel* selected = panel->list[i];
 
-		if((posX >= selected->x) && (posX <= selected->x + selected->Width) &&
-	  	   (posY >= selected->y) && (posY <= selected->y + selected->Height)) {
-			return getPanelClicked(selected, posX - selected->x, posY - selected->y);
+		if((posX >= selected->getPosX()) && (posX <= selected->getPosX() + selected->getWidth()) &&
+	  	   (posY >= selected->getPosY()) && (posY <= selected->getPosY() + selected->getHeight())) {
+			return getPanelClicked(selected, posX - selected->getPosX(), posY - selected->getPosY());
 		}
 	}
 
 	return panel;
+}
+
+const GLdouble Window::getWidth() {
+	return Width;
+}
+
+const GLdouble Window::getHeight() {
+	return Height;
 }

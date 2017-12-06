@@ -18,3 +18,19 @@ void Panel::setPosition(const double x, const double y) {
 void Panel::addPanel(Panel* panel) {
 	list.push_back(panel);
 }
+
+const GLdouble Panel::getWidth() {
+	return Width;
+}
+
+const GLdouble Panel::getHeight() {
+	return Height;
+}
+
+const GLdouble Panel::getPosX() {
+	return x;
+}
+
+const GLdouble Panel::getPosY() {
+	return y;
+}

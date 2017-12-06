@@ -14,22 +14,25 @@ class Gui;
 class Window {
 	public:
 		Window(Gui* gui, const double Width, const double Height, const char* name);
-		~Window();
+		void setSize(const double Width, const double Height);
+		void addPanel(Panel* panel);
 
 		GLFWwindow* getWindow();
-		void setSize(const double Width, const double Height);
-
-		void addPanel(Panel* panel);
+		Panel* getWindowPanel();
 		Panel* getPanelClicked(Panel* panel, const double posX, const double posY);
 
+		const GLdouble getWidth();
+		const GLdouble getHeight();
+
+		std::map<std::array<int, 3>, void(*)()> slots;
+
+	private:
 		Gui* gui;
-		GLFWwindow* window = nullptr;
 		Panel windowPanel;
+		GLFWwindow* window = nullptr;
 
 		GLdouble Width, Height;
 		char* name = nullptr;
-
-		std::map<std::array<int, 3>, void(*)()> slots;
 };
 
 #endif

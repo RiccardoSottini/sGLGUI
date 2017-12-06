@@ -22,9 +22,9 @@ int main() {
 
 	gui.connect(&w, Signal(INPUT_KEY, KEY_E, PRESS), &e_key);
 	gui.connect(&w, Signal(INPUT_CHAR, 'a'), &e_char);
-	gui.connect(&w.windowPanel, Signal(INPUT_CURSOR_POS), &e_cursorpos);
+	gui.connect(w.getWindowPanel(), Signal(INPUT_CURSOR_POS), &e_cursorpos);
 	gui.connect(&w, Signal(INPUT_CURSOR_ENTER, INPUT_CURSOR_ENTERED), &e_cursorenter);
-	gui.connect(&w.windowPanel, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
+	gui.connect(w.getWindowPanel(), Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
 	gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
 	auto EventLoop = std::async(std::launch::async, &Gui::EventLoop, &gui);
