@@ -15,6 +15,7 @@ class Window {
 	public:
 		Window(Gui* gui, const double Width, const double Height, const char* name);
 		void setSize(const double Width, const double Height);
+		void setVisible(const bool visible);
 		void addPanel(Panel* panel);
 
 		GLFWwindow* getWindow();
@@ -23,6 +24,8 @@ class Window {
 
 		const GLdouble getWidth();
 		const GLdouble getHeight();
+
+		const bool isVisible();
 
 		std::map<std::array<int, 3>, void(*)()> slots;
 
@@ -33,6 +36,7 @@ class Window {
 
 		GLdouble Width, Height;
 		char* name = nullptr;
+		bool visible = true;
 };
 
 #endif

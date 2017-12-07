@@ -10,6 +10,7 @@ class Panel{
 		Panel();
 		void setSize(const GLdouble Width, const GLdouble Height);
 		void setPosition(const GLdouble x, const GLdouble y);
+		void setVisible(const bool visible);
 		void addPanel(Panel* panel);
 
 		const GLdouble getWidth();
@@ -18,12 +19,15 @@ class Panel{
 		const GLdouble getPosX();
 		const GLdouble getPosY();
 
+		const bool isVisible();
+
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};
 
 	private:
 		GLdouble Width = 0, Height = 0;
 		GLdouble x = 0, y = 0;
+		bool visible = true;
 };
 
 #endif

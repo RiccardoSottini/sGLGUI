@@ -15,6 +15,10 @@ void Panel::setPosition(const double x, const double y) {
 	this->y = y;
 }
 
+void Panel::setVisible(const bool visible) {
+	this->visible = visible;
+}
+
 void Panel::addPanel(Panel* panel) {
 	list.push_back(panel);
 }
@@ -33,4 +37,8 @@ const GLdouble Panel::getPosX() {
 
 const GLdouble Panel::getPosY() {
 	return y;
+}
+
+const bool Panel::isVisible() {
+	return visible;
 }

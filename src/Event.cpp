@@ -9,9 +9,11 @@ InputEvent::InputEvent(Gui* gui) : gui(gui) {
 }
 
 template<class C, typename V = std::map<int, std::array<int, 3>>::iterator> void InputEvent::execSlot(C Class, V value) {
-	auto it = Class->slots.find(value->second);
-	if(it != Class->slots.end())
-		it->second();
+	if(Class->isVisible()) {
+		auto it = Class->slots.find(value->second);
+		if(it != Class->slots.end())
+			it->second();
+	}
 }
 
 void InputEvent::getEvents() {

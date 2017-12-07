@@ -20,6 +20,10 @@ void Window::setSize(const double Width, const double Height) {
 	this->windowPanel.setSize(Width, Height);
 }
 
+void Window::setVisible(const bool visible) {
+	this->visible = visible;
+}
+
 void Window::addPanel(Panel* panel) {
 	this->windowPanel.addPanel(panel);
 }
@@ -51,4 +55,8 @@ const GLdouble Window::getWidth() {
 
 const GLdouble Window::getHeight() {
 	return Height;
+}
+
+const bool Window::isVisible() {
+	return visible;
 }

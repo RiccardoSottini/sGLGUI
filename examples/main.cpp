@@ -17,6 +17,8 @@ int main() {
 	Window w(&gui, 500, 500, "Window");
 	Window w2(&gui, 300, 300, "Window2");
 
+	//w.getWindowPanel()->setVisible(false);  //set visible = false and catch no events on 'windowPanel' of 'w'
+
 	gui.connect(&w, Signal(INPUT_KEY, KEY_E, PRESS), &e_key);
 	gui.connect(&w, Signal(INPUT_CHAR, 'a'), &e_char);
 	gui.connect(w.getWindowPanel(), Signal(INPUT_CURSOR_POS), &e_cursorpos);
