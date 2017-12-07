@@ -35,7 +35,6 @@ class Gui {
 
 		static std::map<GLFWwindow*, Window*> glfw_windows;
 		std::vector<Window*> windows;
-		std::future<void> eventLoopThread;
 };
 
 #endif

@@ -11,11 +11,7 @@ class InputEvent {
 	public:
 		InputEvent(Gui* gui);
 
-		template<class C, typename N = int> void execSlot(C Class, N n_ev) {
-			auto it = Class->slots.find({events[n_ev][0], events[n_ev][1], events[n_ev][2]});
-			if(it != Class->slots.end())
-				it->second();
-		}
+		template<class C, typename V = std::map<int, std::array<int, 3>>::iterator> void execSlot(C Class, V value);
 
 		void getEvents();
 		static void setEvent(GLFWwindow* window, const int type, const int signal, const int action);

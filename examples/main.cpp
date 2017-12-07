@@ -1,10 +1,7 @@
 #include "Gui.h"
 #include "Window.h"
-#include "Panel.h"
 
 #include <iostream>
-
-#include "Event.h"
 
 void e_key() { std::cout << "e_key\n"; }
 void e_char() { std::cout << "e_char\n"; }
@@ -27,8 +24,7 @@ int main() {
 	gui.connect(w.getWindowPanel(), Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
 	gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
-	auto EventLoop = std::async(std::launch::async, &Gui::EventLoop, &gui);
-	gui.eventLoopThread = std::move(EventLoop);
+	gui.EventLoop();
 
 	return 0;
 }

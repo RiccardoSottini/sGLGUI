@@ -5,3 +5,4 @@ lib/
 bin/
 examples/main
 examples/a.out
+vgcore.*
