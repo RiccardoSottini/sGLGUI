@@ -5,6 +5,15 @@
 
 #include <string>
 
+struct Align {
+	Alignment alignment;
+	GLdouble offset;
+
+	Align(Alignment alignment, GLdouble offset)
+		: alignment(alignment), offset(offset) {
+	}
+};
+
 class Panel{
 	public:
 		Panel();
@@ -12,12 +21,15 @@ class Panel{
 		void setPosition(const GLdouble x, const GLdouble y);
 		void setVisible(const bool visible);
 		void addPanel(Panel* panel);
+		void addAlignment(Align align);
 
 		const GLdouble getWidth();
 		const GLdouble getHeight();
 		
 		const GLdouble getPosX();
 		const GLdouble getPosY();
+
+		const std::vector<Align> getAlignments();
 
 		const bool isVisible();
 
@@ -28,6 +40,7 @@ class Panel{
 		GLdouble Width = 0, Height = 0;
 		GLdouble x = 0, y = 0;
 		bool visible = true;
+		std::vector<Align> alignments;
 };
 
 #endif

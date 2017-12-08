@@ -145,7 +145,7 @@ enum InputKey {
 	KEY_RIGHT_ALT = 346,
 	KEY_RIGHT_SUPER = 347,
 	KEY_MENU = 348,
-	KEY_LAST = 	KEY_MENU
+	KEY_LAST = KEY_MENU
 };
 
 /* INPUT_CURSOR_ENTER signal */
@@ -193,6 +193,16 @@ enum Actions {
 	RELEASE,
 	PRESS,
 	REPEAT
+};
+
+
+
+/* ALIGNMENT */
+enum Alignment {
+	ALIGN_TOP,
+	ALIGN_BOTTOM,
+	ALIGN_RIGHT,
+	ALIGN_LEFT
 };
 
 #endif

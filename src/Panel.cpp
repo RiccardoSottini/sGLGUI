@@ -23,6 +23,10 @@ void Panel::addPanel(Panel* panel) {
 	list.push_back(panel);
 }
 
+void Panel::addAlignment(Align align) {
+	alignments.push_back(align);
+}
+
 const GLdouble Panel::getWidth() {
 	return Width;
 }
@@ -37,6 +41,10 @@ const GLdouble Panel::getPosX() {
 
 const GLdouble Panel::getPosY() {
 	return y;
+}
+
+const std::vector<Align> Panel::getAlignments() {
+	return alignments;
 }
 
 const bool Panel::isVisible() {
