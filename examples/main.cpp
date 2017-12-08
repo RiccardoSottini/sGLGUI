@@ -12,7 +12,6 @@ void e_scroll() { std::cout << "e_scroll\n"; }
 
 int main() {
 	Gui gui;
-	gui.Init();
 	
 	Window w(&gui, 500, 500, "Window");
 	Window w2(&gui, 300, 300, "Window2");

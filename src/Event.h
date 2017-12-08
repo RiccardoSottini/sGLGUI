@@ -26,7 +26,7 @@ class InputEvent {
 		Gui* gui;
 
 		static int n_events;
-		static GLFWwindow* current_window;
+		static std::map<int, GLFWwindow*> ev_window; 
 		static std::map<int, std::array<int, 3>> events;
 		static std::map<int, std::array<GLdouble, 2>> pos;
 };

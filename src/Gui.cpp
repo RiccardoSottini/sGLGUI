@@ -5,6 +5,8 @@
 std::map<GLFWwindow*, Window*> Gui::glfw_windows;
 
 Gui::Gui() {
+    glfwInit();
+    glewInit();
 }
 
 void Gui::EventLoop() {
@@ -27,11 +29,6 @@ void Gui::EventLoop() {
 
         inputEvent.getEvents();
     }
-}
-		
-void Gui::Init() {
-    glfwInit();
-    glewInit();
 }
 
 void Gui::Terminate() {

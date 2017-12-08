@@ -24,7 +24,6 @@ class Gui {
 	public:
 		Gui();
 		void EventLoop();
-		void Init();
 		void Terminate();
 
 		template<class C, class S, typename SLOT> void connect(C Class, S Signal, SLOT slot()) {

@@ -1,7 +1,7 @@
 #include "Event.h"
 
-GLFWwindow* InputEvent::current_window;
 int InputEvent::n_events = 0;
+std::map<int, GLFWwindow*> InputEvent::ev_window; 
 std::map<int, std::array<int, 3>>InputEvent::events;
 std::map<int, std::array<GLdouble, 2>> InputEvent::pos;
 
@@ -19,30 +19,32 @@ template<class C, typename V = std::map<int, std::array<int, 3>>::iterator> void
 void InputEvent::getEvents() {
 	for(int n_ev = 0; n_ev < n_events; n_ev++) {
 		auto value = events.find(n_ev);
+		auto win = ev_window.find(n_ev);
+
 		if(value != events.end()) {
 			switch(value->second[0]) {
 				case INPUT_KEY:
-					execSlot(gui->glfw_windows[current_window], value);
+					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_KEY: " << value->second[1] << "   " << value->second[2] << '\n';
 					break;
 				case INPUT_CHAR:
-					execSlot(gui->glfw_windows[current_window], value);
+					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_CHAR: " << value->second[1] << '\n';
 					break;
 				case INPUT_CURSOR_POS:
-					execSlot(gui->glfw_windows[current_window]->getPanelClicked(gui->glfw_windows[current_window]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), value);
+					execSlot(gui->glfw_windows[win->second]->getPanelClicked(gui->glfw_windows[win->second]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), value);
 					std::cout << "INPUT_CURSOR_POS: " << pos[n_ev][0] << "   " << pos[n_ev][1] << '\n';
 					break;
 				case INPUT_CURSOR_ENTER:
-					execSlot(gui->glfw_windows[current_window], value);
+					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_CURSOR_ENTER: " << value->second[1] << '\n';
 					break;
 				case INPUT_MOUSE_BUTTON:
-					execSlot(gui->glfw_windows[current_window]->getPanelClicked(gui->glfw_windows[current_window]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), value);
+					execSlot(gui->glfw_windows[win->second]->getPanelClicked(gui->glfw_windows[win->second]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), value);
 					std::cout << "INPUT_MOUSE_BUTTON: " << pos[n_ev][0] << "   " << pos[n_ev][1] << "   " << value->second[1] << "   " << value->second[2] << '\n';
 					break;
 				case INPUT_SCROLL:
-					execSlot(gui->glfw_windows[current_window], value);
+					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_SCROLL: " << pos[n_ev][0] << "   " << pos[n_ev][1] << '\n';
 					break;
 				default:
@@ -57,7 +59,7 @@ void InputEvent::getEvents() {
 }
 
 void InputEvent::setEvent(GLFWwindow* window, const int type, const int signal, const int action) {
-	current_window = window;
+	ev_window[n_events] = window;
 	std::array<int, 3> value = {type, signal, action};
 	events[n_events++] = value;
 }
