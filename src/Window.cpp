@@ -25,7 +25,8 @@ void Window::setVisible(const bool visible) {
 }
 
 void Window::addPanel(Panel* panel) {
-	this->windowPanel.addPanel(panel);
+    this->windowPanel.addPanel(panel);
+    panel->windowParent = this;
 }
 
 GLFWwindow* Window::getWindow() {

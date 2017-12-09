@@ -11,14 +11,12 @@ Gui::Gui() {
 
 void Gui::EventLoop() {
     while(true) {
-        for(int i = 0; i < windows.size(); i++)
-            glfwSwapBuffers(windows[i]->getWindow());
-
         glfwPollEvents();
-    
         InputEvent inputEvent(this);
 
         for(int i = 0; i < windows.size(); i++) {
+            glfwSwapBuffers(windows[i]->getWindow());
+
             glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);
             glfwSetCharCallback(windows[i]->getWindow(), inputEvent.CharCallBack);
             glfwSetCursorPosCallback(windows[i]->getWindow(), inputEvent.CursorPosCallBack);

@@ -33,6 +33,15 @@ int main() {
 		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].alignment << "   " << vec_alignments[i].offset << '\n';
 
 
+	Panel p(&w); //set windowParent '&w' for Panel 'p'
+	Panel p2;
+	Panel p3;
+
+	p.addPanel(&p2); //addPanel '&p2' & set windowParent '&w' for Panel 'p2'
+
+	w.addPanel(&p3); //addPanel '&p3' & set windowParent '&w' for Panel 'p3'
+
+
 	gui.EventLoop();
 
 	return 0;

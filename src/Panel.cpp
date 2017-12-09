@@ -5,6 +5,9 @@
 Panel::Panel() {
 }
 
+Panel::Panel(Window* windowParent) : windowParent(windowParent) {
+}
+
 void Panel::setSize(const double Width, const double Height) {
 	this->Width = Width;
 	this->Height = Height;
@@ -21,6 +24,7 @@ void Panel::setVisible(const bool visible) {
 
 void Panel::addPanel(Panel* panel) {
 	list.push_back(panel);
+	panel->windowParent = this->windowParent;
 }
 
 void Panel::addAlignment(Align align) {
