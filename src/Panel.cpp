@@ -5,30 +5,49 @@
 
 Panel::Panel() {
 	// color = {1.0, 1.0, 1.0, 1.0}  WHITE
-	this->pQuad = {{0.0, 0.0}, {0.0, 0.0}, {1.0, 1.0, 1.0, 1.0}}; //size(width,height)  pos(x,y)  color(r,g,b,a)
+	this->pQuad = {-1, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0, 0.0, 1.0}}; //n_quad  size(width,height)  pos(x,y)  color(r,g,b,a)
 }
 
 Panel::Panel(Window* windowParent) : windowParent(windowParent) {
 	this->windowParent->getWindowPanel()->addPanel(this);
 }
 
+void Panel::updatePanel() {
+	if(this->pQuad.n_quad != -1)
+		this->windowParent->updateVertices(this->pQuad.n_quad);
+}
+
 void Panel::setSize(const double Width, const double Height) {
 	this->Width = Width;
 	this->Height = Height;
+
+	this->pQuad.quadSize[0] = Width;
+	this->pQuad.quadSize[1] = Height;
+
+	updatePanel();
 }
 
 void Panel::setPosition(const double x, const double y) {
 	this->x = x;
 	this->y = y;
+
+	this->pQuad.quadPos[0] = x;
+	this->pQuad.quadPos[1] = y;
+
+	updatePanel();
 }
 
 void Panel::setVisible(const bool visible) {
 	this->visible = visible;
+
+	updatePanel();
 }
 
 void Panel::setColor(GLfloat color[4]) {
 	for(int i = 0; i < 4; i++)
 		this->pQuad.quadColor[i] = color[i];
+
+	updatePanel();
 }
 
 void Panel::addPanel(Panel* panel) {
@@ -41,8 +60,11 @@ void Panel::addPanel(Panel* panel) {
 	if((panel->y + panel->Height) > this->Height) panel->pQuad.quadSize[1] = this->Height - panel->y;
 	else panel->pQuad.quadSize[1] = panel->Height;
 
-	panel->pQuad.quadPos[0] = panel->x;
-	panel->pQuad.quadPos[1] = panel->y;
+	if(panel->x > this->Width) panel->pQuad.quadSize[0] = 0;
+	else panel->pQuad.quadPos[0] = this->x + panel->x;
+
+	if(panel->y > this->Height) panel->pQuad.quadSize[1] = 0;
+	else panel->pQuad.quadPos[1] = this->y + panel->y;
 
 	this->windowParent->addPanelQuad(panel);
 }

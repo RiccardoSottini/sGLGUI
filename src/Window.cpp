@@ -9,8 +9,10 @@ Window::Window(Gui* gui, const double Width, const double Height, const char* na
 	gui->windows.push_back(this);
 	gui->glfw_windows[this->window] = this;
 
-	this->windowPanel.windowParent = this;
 	InitGL();
+
+	this->windowPanel.windowParent = this;
+	addPanelQuad(&this->windowPanel);
 }
 
 void Window::setSize(const double Width, const double Height) {
@@ -129,26 +131,36 @@ void Window::InitGL() {
 
 void Window::addPanelQuad(Panel* panel) {
 	panelsQuad.push_back(panel);
+	panel->pQuad.n_quad = n_quads;
 	updateVertices(n_quads++);
 }
 
 void Window::updateVertices(int n_quad) {
-	GLdouble* size = panelsQuad[n_quad]->pQuad.quadSize;
-	GLdouble* pos = panelsQuad[n_quad]->pQuad.quadPos;
-	GLfloat* color = panelsQuad[n_quad]->pQuad.quadColor;
-
-	std::vector<GLfloat> data = {
-		pos[0], pos[1],
-		pos[0] + size[0], pos[1],
-		pos[0] + size[0], pos[1] + size[1],
-		pos[0], pos[1] + size[1]
-	};
-
 	glfwMakeContextCurrent(window);
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
-	for(int v = 0; v < 4; v++) {
-		GLfloat vertex[6] = {data[v*2], data[(v*2)+1], color[0], color[1], color[2], color[3]};
-		glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(vertex)), sizeof(vertex), &vertex);
+
+	if(panelsQuad[n_quad]->isVisible()) {
+		GLdouble* size = panelsQuad[n_quad]->pQuad.quadSize;
+		GLdouble* pos = panelsQuad[n_quad]->pQuad.quadPos;
+		GLfloat* color = panelsQuad[n_quad]->pQuad.quadColor;
+
+		std::vector<GLfloat> data = {
+			pos[0], pos[1],
+			pos[0] + size[0], pos[1],
+			pos[0] + size[0], pos[1] + size[1],
+			pos[0], pos[1] + size[1]
+		};
+
+		for(int v = 0; v < 4; v++) {
+			GLfloat vertex[6] = {data[v*2], data[(v*2)+1], color[0], color[1], color[2], color[3]};
+			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(vertex)), sizeof(vertex), &vertex);
+		}
+	} else {
+		// Clear PanelQuad
+		for(int v = 0; v < 4; v++) {
+			GLfloat vertex[2] = {0.0, 0.0};
+			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(GLfloat) * 6), sizeof(vertex), &vertex);
+		}
 	}
 }
 
