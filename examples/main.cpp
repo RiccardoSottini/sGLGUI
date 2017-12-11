@@ -32,15 +32,18 @@ int main() {
 	for(int i = 0; i < vec_alignments.size(); i++)
 		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].alignment << "   " << vec_alignments[i].offset << '\n';
 
+	GLfloat fColor[4] = {0.0, 0.0, 1.0, 1.0};  // blue
 
-	Panel p(&w); //set windowParent '&w' for Panel 'p'
+	Panel p;
+	p.setSize(200, 200);
+	p.setColor(fColor);
+	w.addPanel(&p);
+
 	Panel p2;
-	Panel p3;
+	p2.setSize(50, 50);
+	p2.setPosition(150, 150);
 
-	p.addPanel(&p2); //addPanel '&p2' & set windowParent '&w' for Panel 'p2'
-
-	w.addPanel(&p3); //addPanel '&p3' & set windowParent '&w' for Panel 'p3'
-
+	p.addPanel(&p2);
 
 	gui.EventLoop();
 

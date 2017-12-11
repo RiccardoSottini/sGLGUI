@@ -1,12 +1,10 @@
 #include "Gui.h"
 #include "Event.h"
-#include "Window.h"
 
 std::map<GLFWwindow*, Window*> Gui::glfw_windows;
 
 Gui::Gui() {
     glfwInit();
-    glewInit();
 }
 
 void Gui::EventLoop() {
@@ -15,6 +13,7 @@ void Gui::EventLoop() {
         InputEvent inputEvent(this);
 
         for(int i = 0; i < windows.size(); i++) {
+            windows[i]->Display();
             glfwSwapBuffers(windows[i]->getWindow());
 
             glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);

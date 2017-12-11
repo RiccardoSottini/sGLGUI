@@ -14,6 +14,12 @@ struct Align {
 	}
 };
 
+struct PanelQuad {
+	GLdouble quadSize[2];
+	GLdouble quadPos[2];
+	GLfloat quadColor[4];
+};
+
 class Panel{
 	public:
 		Panel();
@@ -21,6 +27,7 @@ class Panel{
 		void setSize(const GLdouble Width, const GLdouble Height);
 		void setPosition(const GLdouble x, const GLdouble y);
 		void setVisible(const bool visible);
+		void setColor(GLfloat color[4]);
 		void addPanel(Panel* panel);
 		void addAlignment(Align align);
 
@@ -37,6 +44,7 @@ class Panel{
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};
 		Window* windowParent = nullptr;
+		PanelQuad pQuad;
 
 	private:
 		GLdouble Width = 0, Height = 0;

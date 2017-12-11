@@ -29,10 +29,27 @@ class Window {
 
 		std::map<std::array<int, 3>, void(*)()> slots;
 
+		const int MAX_PANELS = 64; //64 panels
+		int n_quads = 0;
+
+		std::vector<Panel*> panelsQuad;
+
+		void addPanelQuad(Panel* panel);
+		void updateVertices(int n_quad);
+
+		void InitGL();
+		void SetupShaders();
+		void ResizeWindow(int offset_width, int offset_height);
+		void Display();
+
+		GLuint Buffers[1];
+		GLuint VAOs[1];
+
 	private:
 		Gui* gui;
 		Panel windowPanel;
 		GLFWwindow* window = nullptr;
+		GLuint shaderProgram;
 
 		GLdouble Width, Height;
 		char* name = nullptr;
