@@ -12,6 +12,7 @@ Window::Window(Gui* gui, const double Width, const double Height, const char* na
 	InitGL();
 
 	this->windowPanel.windowParent = this;
+	this->windowPanel.panelParent = &this->windowPanel;
 	addPanelQuad(&this->windowPanel.pQuad);
 }
 
@@ -28,7 +29,6 @@ void Window::setVisible(const bool visible) {
 
 void Window::addPanel(Panel* panel) {
     this->windowPanel.addPanel(panel);
-    panel->windowParent = this;
 }
 
 GLFWwindow* Window::getWindow() {

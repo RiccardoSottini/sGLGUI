@@ -26,7 +26,9 @@ class Panel{
 	public:
 		Panel();
 		Panel(Window* windowParent);
+		Panel(Panel* panelParent);
 		void updatePanel();
+		void updatePanelQuad(Panel* panelParent, Panel* panel);
 		void setSize(const GLdouble Width, const GLdouble Height);
 		void setPosition(const GLdouble x, const GLdouble y);
 		void setVisible(const bool visible);
@@ -47,6 +49,7 @@ class Panel{
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};
 		Window* windowParent = nullptr;
+		Panel* panelParent = nullptr;
 		PanelQuad pQuad;
 
 	private:

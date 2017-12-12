@@ -10,17 +10,36 @@ Panel::Panel(Window* windowParent) : windowParent(windowParent) {
 	this->windowParent->getWindowPanel()->addPanel(this);
 }
 
+Panel::Panel(Panel* panelParent) : panelParent(panelParent) {
+	this->panelParent->addPanel(this);
+}
+
 void Panel::updatePanel() {
-	if(this->pQuad.n_quad != -1)
+	if(this->pQuad.n_quad != -1) {
+		updatePanelQuad(this->panelParent, this);
 		this->windowParent->updateVertices(this->pQuad.n_quad);
+	}
+}
+
+void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
+	if(!pParent->pQuad.visible) panel->pQuad.visible = false;
+
+	if((panel->x + panel->Width) > pParent->Width) panel->pQuad.quadSize[0] = pParent->Width - panel->x;
+	else panel->pQuad.quadSize[0] = panel->Width;
+
+	if((panel->y + panel->Height) > pParent->Height) panel->pQuad.quadSize[1] = pParent->Height - panel->y;
+	else panel->pQuad.quadSize[1] = panel->Height;
+
+	if(panel->x > pParent->Width) panel->pQuad.quadSize[0] = 0;
+	else panel->pQuad.quadPos[0] = pParent->pQuad.quadPos[0] + panel->x;
+
+	if(panel->y > pParent->Height) panel->pQuad.quadSize[1] = 0;
+	else panel->pQuad.quadPos[1] = pParent->pQuad.quadPos[1] + panel->y;
 }
 
 void Panel::setSize(const double Width, const double Height) {
 	this->Width = Width;
 	this->Height = Height;
-
-	this->pQuad.quadSize[0] = Width;
-	this->pQuad.quadSize[1] = Height;
 
 	updatePanel();
 }
@@ -28,9 +47,6 @@ void Panel::setSize(const double Width, const double Height) {
 void Panel::setPosition(const double x, const double y) {
 	this->x = x;
 	this->y = y;
-
-	this->pQuad.quadPos[0] = x;
-	this->pQuad.quadPos[1] = y;
 
 	updatePanel();
 }
@@ -51,18 +67,9 @@ void Panel::setColor(GLfloat color[4]) {
 void Panel::addPanel(Panel* panel) {
 	list.push_back(panel);
 	panel->windowParent = this->windowParent;
+	panel->panelParent = this;
 
-	if((panel->x + panel->Width) > this->Width) panel->pQuad.quadSize[0] = this->Width - panel->x;
-	else panel->pQuad.quadSize[0] = panel->Width;
-
-	if((panel->y + panel->Height) > this->Height) panel->pQuad.quadSize[1] = this->Height - panel->y;
-	else panel->pQuad.quadSize[1] = panel->Height;
-
-	if(panel->x > this->Width) panel->pQuad.quadSize[0] = 0;
-	else panel->pQuad.quadPos[0] = this->x + panel->x;
-
-	if(panel->y > this->Height) panel->pQuad.quadSize[1] = 0;
-	else panel->pQuad.quadPos[1] = this->y + panel->y;
+	updatePanelQuad(this, panel);
 
 	this->windowParent->addPanelQuad(&panel->pQuad);
 }
