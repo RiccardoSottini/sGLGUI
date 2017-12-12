@@ -35,20 +35,19 @@ int main() {
 	GLfloat fColorWindowPanel[4] = {0.0, 0.0, 1.0, 1.0};  // blue
 	w.getWindowPanel()->setColor(fColorWindowPanel); //set Window 'w' background color to blue
 
-	Panel p;
+	Panel p(&w);
 	p.setSize(200, 200);
 	p.setPosition(100, 100);
 
 	GLfloat fColorPanel[4] = {1.0, 1.0, 1.0, 1.0};  // white
 	p.setColor(fColorPanel);
-	w.addPanel(&p);
 
 	Panel p2;
 	p2.setSize(50, 50);
 	p2.setPosition(175, 175);
 	p.addPanel(&p2);
 
-	p2.setVisible(false);
+	//p2.setVisible(false);
 
 	gui.EventLoop();
 

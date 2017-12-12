@@ -4,8 +4,6 @@
 #include <iostream>
 
 Panel::Panel() {
-	// color = {1.0, 1.0, 1.0, 1.0}  WHITE
-	this->pQuad = {-1, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0, 0.0, 1.0}}; //n_quad  size(width,height)  pos(x,y)  color(r,g,b,a)
 }
 
 Panel::Panel(Window* windowParent) : windowParent(windowParent) {

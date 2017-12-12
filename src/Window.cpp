@@ -166,8 +166,8 @@ void Window::updateVertices(int n_quad) {
 
 void Window::ResizeWindow(int offset_width, int offset_height) {
 	glfwMakeContextCurrent(window);
-	this->Width += offset_width;
-	this->Height += offset_height;
+
+	setSize(Width + offset_width, Height + offset_height);
 
 	glViewport(0, 0, this->Width, this->Height);
 

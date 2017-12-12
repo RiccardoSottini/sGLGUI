@@ -15,10 +15,10 @@ struct Align {
 };
 
 struct PanelQuad {
-	int n_quad;
-	GLdouble quadSize[2];
-	GLdouble quadPos[2];
-	GLfloat quadColor[4];
+	int n_quad = -1;
+	GLdouble quadSize[2] {0.0, 0.0};
+	GLdouble quadPos[2] {0.0, 0.0};
+	GLfloat quadColor[4] {0.0, 0.0, 0.0, 1.0};
 };
 
 class Panel{
