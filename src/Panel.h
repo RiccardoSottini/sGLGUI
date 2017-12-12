@@ -15,6 +15,7 @@ struct Align {
 };
 
 struct PanelQuad {
+	bool visible = true;
 	int n_quad = -1;
 	GLdouble quadSize[2] {0.0, 0.0};
 	GLdouble quadPos[2] {0.0, 0.0};
@@ -51,7 +52,6 @@ class Panel{
 	private:
 		GLdouble Width = 0, Height = 0;
 		GLdouble x = 0, y = 0;
-		bool visible = true;
 		std::vector<Align> alignments;
 };
 

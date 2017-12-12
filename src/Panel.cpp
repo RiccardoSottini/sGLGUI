@@ -36,7 +36,7 @@ void Panel::setPosition(const double x, const double y) {
 }
 
 void Panel::setVisible(const bool visible) {
-	this->visible = visible;
+	this->pQuad.visible = visible;
 
 	updatePanel();
 }
@@ -64,7 +64,7 @@ void Panel::addPanel(Panel* panel) {
 	if(panel->y > this->Height) panel->pQuad.quadSize[1] = 0;
 	else panel->pQuad.quadPos[1] = this->y + panel->y;
 
-	this->windowParent->addPanelQuad(panel);
+	this->windowParent->addPanelQuad(&panel->pQuad);
 }
 
 void Panel::addAlignment(Align align) {
@@ -92,5 +92,5 @@ const std::vector<Align> Panel::getAlignments() {
 }
 
 const bool Panel::isVisible() {
-	return visible;
+	return this->pQuad.visible;
 }

@@ -12,7 +12,7 @@ Window::Window(Gui* gui, const double Width, const double Height, const char* na
 	InitGL();
 
 	this->windowPanel.windowParent = this;
-	addPanelQuad(&this->windowPanel);
+	addPanelQuad(&this->windowPanel.pQuad);
 }
 
 void Window::setSize(const double Width, const double Height) {
@@ -129,9 +129,9 @@ void Window::InitGL() {
 	glEnableVertexAttribArray(2);
 }
 
-void Window::addPanelQuad(Panel* panel) {
-	panelsQuad.push_back(panel);
-	panel->pQuad.n_quad = n_quads;
+void Window::addPanelQuad(PanelQuad* pQuad) {
+	panelsQuad.push_back(pQuad);
+	pQuad->n_quad = n_quads;
 	updateVertices(n_quads++);
 }
 
@@ -139,10 +139,10 @@ void Window::updateVertices(int n_quad) {
 	glfwMakeContextCurrent(window);
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 
-	if(panelsQuad[n_quad]->isVisible()) {
-		GLdouble* size = panelsQuad[n_quad]->pQuad.quadSize;
-		GLdouble* pos = panelsQuad[n_quad]->pQuad.quadPos;
-		GLfloat* color = panelsQuad[n_quad]->pQuad.quadColor;
+	if(panelsQuad[n_quad]->visible) {
+		GLdouble* size = panelsQuad[n_quad]->quadSize;
+		GLdouble* pos = panelsQuad[n_quad]->quadPos;
+		GLfloat* color = panelsQuad[n_quad]->quadColor;
 
 		std::vector<GLfloat> data = {
 			pos[0], pos[1],

@@ -32,9 +32,9 @@ class Window {
 		const int MAX_PANELS = 64; //64 panels
 		int n_quads = 0;
 
-		std::vector<Panel*> panelsQuad;
+		std::vector<PanelQuad*> panelsQuad;
 
-		void addPanelQuad(Panel* panel);
+		void addPanelQuad(PanelQuad* pQuad);
 		void updateVertices(int n_quad);
 
 		void InitGL();
