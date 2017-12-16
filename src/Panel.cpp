@@ -37,18 +37,25 @@ void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
 	else panel->pQuad.quadPos[1] = pParent->pQuad.quadPos[1] + panel->y;
 }
 
+void Panel::updatePanelChild(Panel* pChild) {
+	pChild->updatePanel();
+
+	for(int i = 0; i < pChild->list.size(); i++)
+		updatePanelChild(pChild->list[i]);
+}
+
 void Panel::setSize(const double Width, const double Height) {
 	this->Width = Width;
 	this->Height = Height;
 
-	updatePanel();
+	updatePanelChild(this);
 }
 
 void Panel::setPosition(const double x, const double y) {
 	this->x = x;
 	this->y = y;
 
-	updatePanel();
+	updatePanelChild(this);
 }
 
 void Panel::setVisible(const bool visible) {

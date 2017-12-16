@@ -29,6 +29,7 @@ class Panel{
 		Panel(Panel* panelParent);
 		void updatePanel();
 		void updatePanelQuad(Panel* panelParent, Panel* panel);
+		void updatePanelChild(Panel* pParent);
 		void setSize(const GLdouble Width, const GLdouble Height);
 		void setPosition(const GLdouble x, const GLdouble y);
 		void setVisible(const bool visible);

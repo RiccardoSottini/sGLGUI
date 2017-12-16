@@ -32,24 +32,31 @@ int main() {
 	for(int i = 0; i < vec_alignments.size(); i++)
 		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].alignment << "   " << vec_alignments[i].offset << '\n';
 
-	GLfloat fColorWindowPanel[4] = {0.0, 0.0, 1.0, 1.0};  // blue
-	w.getWindowPanel()->setColor(fColorWindowPanel); //set Window 'w' background color to blue
+	GLfloat fColorPanelBlue[4] = {0.0, 0.0, 1.0, 1.0};  // blue
+	GLfloat fColorPanelWhite[4] = {1.0, 1.0, 1.0, 1.0};  // white
+	GLfloat fColorPanelGreen[4] = {0.0, 1.0, 0.0, 1.0};  // green
+
+	w.getWindowPanel()->setColor(fColorPanelBlue); //set Window 'w' background color to blue
 
 	Panel p(&w);
 	p.setSize(200, 200);
-	p.setPosition(100, 100);
-	GLfloat fColorPanel[4] = {1.0, 1.0, 1.0, 1.0};  // white
-	p.setColor(fColorPanel);
+	p.setColor(fColorPanelWhite);
 
 	Panel p2(&p);
 	p2.setSize(100, 100);
-	p2.setPosition(100, 100);
-	GLfloat fColorPanel2[4] = {0.0, 1.0, 0.0, 1.0};  // white
-	p2.setColor(fColorPanel2);
+	p2.setColor(fColorPanelGreen);
 
 	Panel p3(&p2);
 	p3.setSize(50, 50);
+	p3.setColor(fColorPanelBlue);
+
+	Panel p4(&p3);
+	p4.setSize(25, 25);
+
+	p.setPosition(300, 300);
+	p2.setPosition(100, 100);
 	p3.setPosition(50, 50);
+	p4.setPosition(25, 25);
 
 	gui.EventLoop();
 
