@@ -22,6 +22,7 @@ class InputEvent {
 		static void CursorEnterCallBack(GLFWwindow* window, int entered);
 		static void MouseButtonCallBack(GLFWwindow* window, int button, int align, int mods);
 		static void ScrollCallBack(GLFWwindow* window, double xoffset, double yoffset);
+		static void WindowSizeCallBack(GLFWwindow* window, int width, int height);
 
 		Gui* gui;
 
@@ -29,6 +30,7 @@ class InputEvent {
 		static std::map<int, GLFWwindow*> ev_window; 
 		static std::map<int, std::array<int, 3>> events;
 		static std::map<int, std::array<GLdouble, 2>> pos;
+		static std::map<int, std::array<GLdouble, 2>> size;
 };
 
 #endif

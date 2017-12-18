@@ -4,6 +4,7 @@ int InputEvent::n_events = 0;
 std::map<int, GLFWwindow*> InputEvent::ev_window; 
 std::map<int, std::array<int, 3>>InputEvent::events;
 std::map<int, std::array<GLdouble, 2>> InputEvent::pos;
+std::map<int, std::array<GLdouble, 2>> InputEvent::size;
 
 InputEvent::InputEvent(Gui* gui) : gui(gui) {
 }
@@ -46,6 +47,10 @@ void InputEvent::getEvents() {
 				case INPUT_SCROLL:
 					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_SCROLL: " << pos[n_ev][0] << "   " << pos[n_ev][1] << '\n';
+					break;
+				case WINDOW_SIZE:
+					execSlot(gui->glfw_windows[win->second], value);
+					std::cout << "WINDOW_SIZE: " << size[n_ev][0] << "   " << size[n_ev][1] << '\n';
 					break;
 				default:
 					break;
@@ -92,4 +97,10 @@ void InputEvent::ScrollCallBack(GLFWwindow* window, double xoffset, double yoffs
 	pos[n_events][0] = xoffset, pos[n_events][1] = yoffset;
 
 	setEvent(window, INPUT_SCROLL, 0, 0);
+}
+
+void InputEvent::WindowSizeCallBack(GLFWwindow* window, int width, int height) {
+	size[n_events][0] = width, size[n_events][1] = height;
+
+	setEvent(window, WINDOW_SIZE, 0, 0);
 }

@@ -13,6 +13,14 @@ void Gui::EventLoop() {
         InputEvent inputEvent(this);
 
         for(int i = 0; i < windows.size(); i++) {
+            int width, height, offsetWidth, offsetHeight;
+            glfwGetWindowSize(windows[i]->getWindow(), &width, &height);
+            offsetWidth = width - windows[i]->getWidth();
+            offsetHeight = height - windows[i]->getHeight();
+
+            if(offsetWidth || offsetHeight)
+                windows[i]->ResizeWindow(offsetWidth, offsetHeight);
+
             windows[i]->Display();
             glfwSwapBuffers(windows[i]->getWindow());
 
@@ -22,6 +30,8 @@ void Gui::EventLoop() {
             glfwSetCursorEnterCallback(windows[i]->getWindow(), inputEvent.CursorEnterCallBack);
             glfwSetMouseButtonCallback(windows[i]->getWindow(), inputEvent.MouseButtonCallBack);
             glfwSetScrollCallback(windows[i]->getWindow(), inputEvent.ScrollCallBack);
+
+            glfwSetWindowSizeCallback(windows[i]->getWindow(), inputEvent.WindowSizeCallBack);
         }
 
         inputEvent.getEvents();

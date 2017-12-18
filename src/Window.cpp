@@ -169,7 +169,7 @@ void Window::ResizeWindow(int offset_width, int offset_height) {
 
 	setSize(Width + offset_width, Height + offset_height);
 
-	glViewport(0, 0, this->Width, this->Height);
+	glViewport(0, 0, Width, Height);
 
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	glUniform2f(0, Width, Height);
