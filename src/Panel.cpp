@@ -81,8 +81,8 @@ void Panel::addPanel(Panel* panel) {
 	this->windowParent->addPanelQuad(&panel->pQuad);
 }
 
-void Panel::addAlignment(Align align) {
-	alignments.push_back(align);
+void Panel::addAlignment(Alignment alignment, const GLdouble offset) {
+	pQuad.alignments[alignment] = offset;
 }
 
 const GLdouble Panel::getWidth() {
@@ -101,8 +101,8 @@ const GLdouble Panel::getPosY() {
 	return y;
 }
 
-const std::vector<Align> Panel::getAlignments() {
-	return alignments;
+const std::array<GLdouble, 4> Panel::getAlignments() {
+	return pQuad.alignments;
 }
 
 const bool Panel::isVisible() {

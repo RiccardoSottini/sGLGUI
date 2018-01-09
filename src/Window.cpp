@@ -75,7 +75,11 @@ const char* vertexSource = R"glsl(
 
 	void main() {
 		fs_color = vColor;
-		gl_Position = vec4(vPosition[0] / (WindowSize[0] / 2.0) - 1, 1 - (vPosition[1] / (WindowSize[1] / 2.0)), 0.0, 1.0);
+
+		gl_Position[0] = (((vPosition[0] >= 0) ? vPosition[0] : WindowSize[0] + vPosition[0] + 1) / (WindowSize[0] / 2.0)) - 1;
+		gl_Position[1] = 1 - (((vPosition[1] >= 0) ? vPosition[1] : WindowSize[1] + vPosition[1] + 1) / (WindowSize[1] / 2.0));
+		gl_Position[2] = 0.0;
+		gl_Position[3] = 1.0;
 	}
 )glsl";
 
@@ -143,12 +147,20 @@ void Window::updateVertices(int n_quad) {
 		GLdouble* size = panelsQuad[n_quad]->quadSize;
 		GLdouble* pos = panelsQuad[n_quad]->quadPos;
 		GLfloat* color = panelsQuad[n_quad]->quadColor;
+		std::array<GLdouble, 4> alignments = panelsQuad[n_quad]->alignments;
+
+		GLdouble line[4] = {
+			(alignments[ALIGN_TOP] >= 0) ? alignments[ALIGN_TOP] : pos[1],
+			(alignments[ALIGN_BOTTOM] >= 0) ? -alignments[ALIGN_BOTTOM] - 1 : line[ALIGN_TOP] + size[1],
+			(alignments[ALIGN_LEFT] >= 0) ? alignments[ALIGN_LEFT] : pos[0],
+			(alignments[ALIGN_RIGHT] >= 0) ? -alignments[ALIGN_RIGHT] - 1 : line[ALIGN_LEFT] + size[0]
+		};
 
 		std::vector<GLfloat> data = {
-			pos[0], pos[1],
-			pos[0] + size[0], pos[1],
-			pos[0] + size[0], pos[1] + size[1],
-			pos[0], pos[1] + size[1]
+			line[ALIGN_LEFT], line[ALIGN_TOP],
+			line[ALIGN_RIGHT], line[ALIGN_TOP],
+			line[ALIGN_RIGHT], line[ALIGN_BOTTOM],
+			line[ALIGN_LEFT], line[ALIGN_BOTTOM]
 		};
 
 		for(int v = 0; v < 4; v++) {

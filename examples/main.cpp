@@ -26,19 +26,22 @@ int main() {
 	gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
 
-	w.getWindowPanel()->addAlignment(Align(ALIGN_RIGHT, 10)); //add an alignment (2, 10)
+	w.getWindowPanel()->addAlignment(ALIGN_TOP, 100);	//add an alignment (0, 10)
+	w.getWindowPanel()->addAlignment(ALIGN_BOTTOM, 100);	//add an alignment (1, 10)
+	w.getWindowPanel()->addAlignment(ALIGN_LEFT, 100);	//add an alignment (2, 10)
+	w.getWindowPanel()->addAlignment(ALIGN_RIGHT, 100);	//add an alignment (3, 10)
 
-	std::vector<Align> vec_alignments = w.getWindowPanel()->getAlignments();
+	std::array<GLdouble, 4> vec_alignments = w.getWindowPanel()->getAlignments();
 	for(int i = 0; i < vec_alignments.size(); i++)
-		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].alignment << "   " << vec_alignments[i].offset << '\n';
+		std::cout << "Alignment[" << i << "]: " << vec_alignments[i] << '\n';
 
-	GLfloat fColorPanelBlue[4] = {0.0, 0.0, 1.0, 1.0};  // blue
-	GLfloat fColorPanelWhite[4] = {1.0, 1.0, 1.0, 1.0};  // white
-	GLfloat fColorPanelGreen[4] = {0.0, 1.0, 0.0, 1.0};  // green
+	GLfloat fColorPanelBlue[4] = {0.0, 0.0, 1.0, 1.0};	// blue
+	GLfloat fColorPanelWhite[4] = {1.0, 1.0, 1.0, 1.0};	// white
+	GLfloat fColorPanelGreen[4] = {0.0, 1.0, 0.0, 1.0};	// green
 
 	w.getWindowPanel()->setColor(fColorPanelBlue); //set Window 'w' background color to blue
 
-	Panel p(&w);
+	/*Panel p(&w);
 	p.setSize(200, 200);
 	p.setColor(fColorPanelWhite);
 
@@ -56,7 +59,7 @@ int main() {
 	p.setPosition(300, 300);
 	p2.setPosition(100, 100);
 	p3.setPosition(50, 50);
-	p4.setPosition(25, 25);
+	p4.setPosition(25, 25);*/
 
 	gui.EventLoop();
 

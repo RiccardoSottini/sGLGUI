@@ -5,21 +5,13 @@
 
 #include <string>
 
-struct Align {
-	Alignment alignment;
-	GLdouble offset;
-
-	Align(Alignment alignment, GLdouble offset)
-		: alignment(alignment), offset(offset) {
-	}
-};
-
 struct PanelQuad {
 	bool visible = true;
 	int n_quad = -1;
 	GLdouble quadSize[2] {0.0, 0.0};
 	GLdouble quadPos[2] {0.0, 0.0};
 	GLfloat quadColor[4] {0.0, 0.0, 0.0, 1.0};
+	std::array<GLdouble, 4> alignments = {-1, -1, -1, -1};
 };
 
 class Panel{
@@ -35,7 +27,7 @@ class Panel{
 		void setVisible(const bool visible);
 		void setColor(GLfloat color[4]);
 		void addPanel(Panel* panel);
-		void addAlignment(Align align);
+		void addAlignment(Alignment alignment, const GLdouble offset);
 
 		const GLdouble getWidth();
 		const GLdouble getHeight();
@@ -43,7 +35,7 @@ class Panel{
 		const GLdouble getPosX();
 		const GLdouble getPosY();
 
-		const std::vector<Align> getAlignments();
+		const std::array<GLdouble, 4> getAlignments();
 
 		const bool isVisible();
 
@@ -56,7 +48,6 @@ class Panel{
 	private:
 		GLdouble Width = 0, Height = 0;
 		GLdouble x = 0, y = 0;
-		std::vector<Align> alignments;
 };
 
 #endif

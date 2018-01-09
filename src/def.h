@@ -201,8 +201,8 @@ enum Actions {
 enum Alignment {
 	ALIGN_TOP,
 	ALIGN_BOTTOM,
-	ALIGN_RIGHT,
-	ALIGN_LEFT
+	ALIGN_LEFT,
+	ALIGN_RIGHT
 };
 
 #endif
