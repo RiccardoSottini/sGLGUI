@@ -45,6 +45,8 @@ class Window {
 		GLuint Buffers[1];
 		GLuint VAOs[1];
 
+		Panel* selectedPanel;
+
 	private:
 		Gui* gui;
 		Panel windowPanel;

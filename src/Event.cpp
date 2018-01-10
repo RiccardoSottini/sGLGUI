@@ -41,7 +41,11 @@ void InputEvent::getEvents() {
 					std::cout << "INPUT_CURSOR_ENTER: " << value->second[1] << '\n';
 					break;
 				case INPUT_MOUSE_BUTTON:
+					if(value->second[1] == MOUSE_BUTTON_LEFT && value->second[2] == PRESS)
+						gui->glfw_windows[win->second]->selectedPanel = gui->glfw_windows[win->second]->getPanelClicked(gui->glfw_windows[win->second]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]);
+
 					execSlot(gui->glfw_windows[win->second]->getPanelClicked(gui->glfw_windows[win->second]->getWindowPanel(), pos[n_ev][0], pos[n_ev][1]), value);
+
 					std::cout << "INPUT_MOUSE_BUTTON: " << pos[n_ev][0] << "   " << pos[n_ev][1] << "   " << value->second[1] << "   " << value->second[2] << '\n';
 					break;
 				case INPUT_SCROLL:
