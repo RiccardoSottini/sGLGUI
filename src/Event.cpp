@@ -25,10 +25,16 @@ void InputEvent::getEvents() {
 		if(value != events.end()) {
 			switch(value->second[0]) {
 				case INPUT_KEY:
+					if(gui->glfw_windows[win->second]->selectedPanel->getPanelType() == TEXTAREA && value->second[1] == 259 && (value->second[2] == PRESS || value->second[2] == REPEAT))
+						gui->glfw_windows[win->second]->selectedPanel->removeChar();
+
 					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_KEY: " << value->second[1] << "   " << value->second[2] << '\n';
 					break;
 				case INPUT_CHAR:
+					if(gui->glfw_windows[win->second]->selectedPanel->getPanelType() == TEXTAREA)
+						gui->glfw_windows[win->second]->selectedPanel->addChar(value->second[1]);
+
 					execSlot(gui->glfw_windows[win->second], value);
 					std::cout << "INPUT_CHAR: " << value->second[1] << '\n';
 					break;

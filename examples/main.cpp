@@ -1,11 +1,12 @@
 #include "Gui.h"
 #include "Window.h"
+#include "TextArea.h"
 
 #include <iostream>
 
 Gui gui;
 Window w(&gui, 500, 500, "Window");
-Window w2(&gui, 300, 300, "Window2");
+//Window w2(&gui, 300, 300, "Window2");
 
 GLfloat fColorPanelBlue[4] = {0.0, 0.0, 1.0, 1.0};	// blue
 GLfloat fColorPanelWhite[4] = {1.0, 1.0, 1.0, 1.0};	// white
@@ -63,6 +64,12 @@ int main() {
 	p2.setPosition(100, 100);
 	p3.setPosition(50, 50);
 	p4.setPosition(25, 25);*/
+
+	TextArea t(&w);
+	t.setSize(1000, 50);
+	t.addAlignment(ALIGN_RIGHT, 0);
+	t.setColor(fColorPanelGreen);
+	gui.connect(&t, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &selectedPanelSetColor);
 
 	gui.EventLoop();
 

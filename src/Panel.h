@@ -14,7 +14,7 @@ struct PanelQuad {
 	std::array<GLdouble, 4> alignments = {-1, -1, -1, -1};
 };
 
-class Panel{
+class Panel {
 	public:
 		Panel();
 		Panel(Window* windowParent);
@@ -37,6 +37,8 @@ class Panel{
 
 		const std::array<GLdouble, 4> getAlignments();
 
+		const PanelType getPanelType();
+
 		const bool isVisible();
 
 		std::map<std::array<int, 3>, void(*)()> slots;
@@ -45,9 +47,13 @@ class Panel{
 		Panel* panelParent = nullptr;
 		PanelQuad pQuad;
 
-	private:
-		GLdouble Width = 0, Height = 0;
+		virtual void addChar(const char c) {};
+		virtual void removeChar() {};
+
+	protected:
+		PanelType type = PANEL;
 		GLdouble x = 0, y = 0;
+		GLdouble Width = 0, Height = 0;
 };
 
 #endif

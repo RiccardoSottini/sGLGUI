@@ -105,6 +105,10 @@ const std::array<GLdouble, 4> Panel::getAlignments() {
 	return pQuad.alignments;
 }
 
+const PanelType Panel::getPanelType() {
+	return type;
+}
+
 const bool Panel::isVisible() {
 	return this->pQuad.visible;
 }

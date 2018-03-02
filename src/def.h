@@ -205,4 +205,11 @@ enum Alignment {
 	ALIGN_RIGHT
 };
 
+
+/* PANEL */
+enum PanelType {
+	PANEL,
+	TEXTAREA
+};
+
 #endif
