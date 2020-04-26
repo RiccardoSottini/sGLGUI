@@ -1,6 +1,11 @@
 #ifndef DEF_H
 #define DEF_H
 
+enum SizeType {
+	SIZE_PIXEL,
+	SIZE_PERCENT
+};
+
 /* type */
 enum Type {
 	INPUT_KEY,

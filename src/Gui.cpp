@@ -8,33 +8,38 @@ Gui::Gui() {
 }
 
 void Gui::EventLoop() {
+	auto WindowSizeCallBack = [](GLFWwindow * window, int width, int height) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))->ResizeWindow(width, height);
+	};
+
     while(true) {
         glfwPollEvents();
-        InputEvent inputEvent(this);
+        //InputEvent inputEvent(this);
 
         for(int i = 0; i < windows.size(); i++) {
-            int width, height, offsetWidth, offsetHeight;
+            /*int width, height, offsetWidth, offsetHeight;
             glfwGetWindowSize(windows[i]->getWindow(), &width, &height);
             offsetWidth = width - windows[i]->getWidth();
             offsetHeight = height - windows[i]->getHeight();
 
             if(offsetWidth || offsetHeight)
-                windows[i]->ResizeWindow(offsetWidth, offsetHeight);
+                windows[i]->ResizeWindow(offsetWidth, offsetHeight);*/
+
+			glfwSetWindowUserPointer(windows[i]->getWindow(), windows[i]);
 
             windows[i]->Display();
-            glfwSwapBuffers(windows[i]->getWindow());
 
-            glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);
+            /*glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);
             glfwSetCharCallback(windows[i]->getWindow(), inputEvent.CharCallBack);
             glfwSetCursorPosCallback(windows[i]->getWindow(), inputEvent.CursorPosCallBack);
             glfwSetCursorEnterCallback(windows[i]->getWindow(), inputEvent.CursorEnterCallBack);
             glfwSetMouseButtonCallback(windows[i]->getWindow(), inputEvent.MouseButtonCallBack);
-            glfwSetScrollCallback(windows[i]->getWindow(), inputEvent.ScrollCallBack);
+            glfwSetScrollCallback(windows[i]->getWindow(), inputEvent.ScrollCallBack);*/
 
-            glfwSetWindowSizeCallback(windows[i]->getWindow(), inputEvent.WindowSizeCallBack);
+            glfwSetWindowSizeCallback(windows[i]->getWindow(), WindowSizeCallBack);
         }
 
-        inputEvent.getEvents();
+        //inputEvent.getEvents();
     }
 }
 

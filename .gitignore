@@ -6,3 +6,10 @@ bin/
 examples/main
 examples/a.out
 vgcore.*
+.vs/
+x64/
+Debug/
+sGLGUI.sln
+sGLGUI.vcxproj
+sGLGUI.vcxproj.filters
+sGLGUI.vcxproj.user

@@ -13,17 +13,17 @@ class Gui;
 
 class Window {
 	public:
-		Window(Gui* gui, const double Width, const double Height, const char* name);
-		void setSize(const double Width, const double Height);
+		Window(Gui* gui, const GLfloat Width, const GLfloat Height, const char* name);
+		void setSize(const GLfloat Width, const GLfloat Height);
 		void setVisible(const bool visible);
 		void addPanel(Panel* panel);
 
 		GLFWwindow* getWindow();
 		Panel* getWindowPanel();
-		Panel* getPanelClicked(Panel* panel, const double posX, const double posY);
+		Panel* getPanelClicked(Panel* panel, const GLfloat posX, const GLfloat posY);
 
-		const GLdouble getWidth();
-		const GLdouble getHeight();
+		const GLfloat getWidth();
+		const GLfloat getHeight();
 
 		const bool isVisible();
 
@@ -39,7 +39,7 @@ class Window {
 
 		void InitGL();
 		void SetupShaders();
-		void ResizeWindow(int offset_width, int offset_height);
+		void ResizeWindow(int Width, int Height);
 		void Display();
 
 		GLuint Buffers[1];
@@ -53,7 +53,7 @@ class Window {
 		GLFWwindow* window = nullptr;
 		GLuint shaderProgram;
 
-		GLdouble Width, Height;
+		GLfloat Width, Height;
 		char* name = nullptr;
 		bool visible = true;
 };

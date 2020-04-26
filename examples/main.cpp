@@ -4,13 +4,11 @@
 
 #include <iostream>
 
-Gui gui;
-Window w(&gui, 500, 500, "Window");
-//Window w2(&gui, 300, 300, "Window2");
-
-GLfloat fColorPanelBlue[4] = {0.0, 0.0, 1.0, 1.0};	// blue
-GLfloat fColorPanelWhite[4] = {1.0, 1.0, 1.0, 1.0};	// white
-GLfloat fColorPanelGreen[4] = {0.0, 1.0, 0.0, 1.0};	// green
+GLfloat colorRed[4]	=	{ 1.0, 0.0, 0.0, 1.0 };	//rgba red color
+GLfloat colorGreen[4] = { 0.0, 1.0, 0.0, 1.0 };	//rgba green color
+GLfloat colorBlue[4] =	{ 0.0, 0.0, 1.0, 1.0 };	//rgba blue color
+GLfloat colorBlack[4] = { 0.0, 0.0, 0.0, 1.0 };	//rgba black color
+GLfloat colorWhite[4] = { 1.0, 1.0, 1.0, 1.0 };	//rgba white color
 
 void e_key() { std::cout << "e_key\n"; }
 void e_char() { std::cout << "e_char\n"; }
@@ -19,59 +17,46 @@ void e_cursorenter() { std::cout << "e_cursorenter\n"; }
 void e_mousebutton() { std::cout << "e_mousebutton\n"; }
 void e_scroll() { std::cout << "e_scroll\n"; }
 
-void selectedPanelSetColor() {
-	w.selectedPanel->setColor(fColorPanelWhite);
-}
-
 int main() {
+	Gui *gui = new Gui();
+	Window w(gui, 500, 500, "Window");
+
 	//w.getWindowPanel()->setVisible(false); //set visible = false and catch no events on 'windowPanel' of 'w'
 
-	gui.connect(&w, Signal(INPUT_KEY, KEY_E, PRESS), &e_key);
-	gui.connect(&w, Signal(INPUT_CHAR, 'a'), &e_char);
-	gui.connect(w.getWindowPanel(), Signal(INPUT_CURSOR_POS), &e_cursorpos);
-	gui.connect(&w, Signal(INPUT_CURSOR_ENTER, INPUT_CURSOR_ENTERED), &e_cursorenter);
-	gui.connect(w.getWindowPanel(), Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
-	gui.connect(&w, Signal(INPUT_SCROLL), &e_scroll);
-	gui.connect(w.getWindowPanel(), Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &selectedPanelSetColor);
+	gui->connect(&w, Signal(INPUT_KEY, KEY_E, PRESS), &e_key);
+	gui->connect(&w, Signal(INPUT_CHAR, 'a'), &e_char);
+	gui->connect(&w, Signal(INPUT_CURSOR_POS), &e_cursorpos);
+	gui->connect(&w, Signal(INPUT_CURSOR_ENTER, INPUT_CURSOR_ENTERED), &e_cursorenter);
+	gui->connect(&w, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
+	gui->connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
-	w.getWindowPanel()->addAlignment(ALIGN_TOP, 100);	//add an alignment (0, 10)
-	w.getWindowPanel()->addAlignment(ALIGN_BOTTOM, 100);	//add an alignment (1, 10)
-	w.getWindowPanel()->addAlignment(ALIGN_LEFT, 100);	//add an alignment (2, 10)
-	w.getWindowPanel()->addAlignment(ALIGN_RIGHT, 100);	//add an alignment (3, 10)
-
-	std::array<GLdouble, 4> vec_alignments = w.getWindowPanel()->getAlignments();
+	std::array<GLfloat, 4> vec_alignments = w.getWindowPanel()->getAlignments();
 	for(int i = 0; i < vec_alignments.size(); i++)
 		std::cout << "Alignment[" << i << "]: " << vec_alignments[i] << '\n';
 
-	w.getWindowPanel()->setColor(fColorPanelBlue); //set Window 'w' background color to blue
-
-	/*Panel p(&w);
-	p.setSize(200, 200);
-	p.setColor(fColorPanelWhite);
+	Panel p(&w);
+	p.setPosition(10, 10, SIZE_PERCENT);
+	p.setSize(80, 80, SIZE_PERCENT);
+	p.setMinHeight(300, SIZE_PIXEL);
+	p.setMinWidth(300, SIZE_PIXEL);
+	p.setColor(colorRed);
 
 	Panel p2(&p);
-	p2.setSize(100, 100);
-	p2.setColor(fColorPanelGreen);
+	p2.addAlignment(ALIGN_RIGHT, 0);
+	p2.setSize(50, 50, SIZE_PERCENT);
+	p2.setColor(colorGreen);
 
-	Panel p3(&p2);
-	p3.setSize(50, 50);
-	p3.setColor(fColorPanelBlue);
+	Panel p3(&p);
+	p3.setPosY(50, SIZE_PERCENT);
+	p3.setSize(50, 50, SIZE_PERCENT);
+	p3.setColor(colorBlue);
 
-	Panel p4(&p3);
-	p4.setSize(25, 25);
+	Panel p4(&p2);
+	p4.addAlignment(ALIGN_BOTTOM, 0);
+	p4.setSize(100, 100, SIZE_PIXEL);
+	p4.setColor(colorWhite);
 
-	p.setPosition(300, 300);
-	p2.setPosition(100, 100);
-	p3.setPosition(50, 50);
-	p4.setPosition(25, 25);*/
-
-	TextArea t(&w);
-	t.setSize(1000, 50);
-	t.addAlignment(ALIGN_RIGHT, 0);
-	t.setColor(fColorPanelGreen);
-	gui.connect(&t, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &selectedPanelSetColor);
-
-	gui.EventLoop();
+	gui->EventLoop();
 
 	return 0;
 }

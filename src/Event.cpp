@@ -109,8 +109,10 @@ void InputEvent::ScrollCallBack(GLFWwindow* window, double xoffset, double yoffs
 	setEvent(window, INPUT_SCROLL, 0, 0);
 }
 
+/*
 void InputEvent::WindowSizeCallBack(GLFWwindow* window, int width, int height) {
 	size[n_events][0] = width, size[n_events][1] = height;
 
 	setEvent(window, WINDOW_SIZE, 0, 0);
 }
+*/

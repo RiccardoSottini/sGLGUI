@@ -8,10 +8,9 @@
 struct PanelQuad {
 	bool visible = true;
 	int n_quad = -1;
-	GLdouble quadSize[2] {0.0, 0.0};
-	GLdouble quadPos[2] {0.0, 0.0};
 	GLfloat quadColor[4] {0.0, 0.0, 0.0, 1.0};
-	std::array<GLdouble, 4> alignments = {-1, -1, -1, -1};
+	std::array<GLfloat, 4> alignments = { -1, -1, -1, -1 };
+	std::array<GLfloat, 4> lines = { 0.0, 0.0, 0.0, 0.0 };
 };
 
 class Panel {
@@ -19,27 +18,48 @@ class Panel {
 		Panel();
 		Panel(Window* windowParent);
 		Panel(Panel* panelParent);
-		void updatePanel();
-		void updatePanelQuad(Panel* panelParent, Panel* panel);
-		void updatePanelChild(Panel* pParent);
-		void setSize(const GLdouble Width, const GLdouble Height);
-		void setPosition(const GLdouble x, const GLdouble y);
-		void setVisible(const bool visible);
-		void setColor(GLfloat color[4]);
+
 		void addPanel(Panel* panel);
-		void addAlignment(Alignment alignment, const GLdouble offset);
-
-		const GLdouble getWidth();
-		const GLdouble getHeight();
-		
-		const GLdouble getPosX();
-		const GLdouble getPosY();
-
-		const std::array<GLdouble, 4> getAlignments();
-
 		const PanelType getPanelType();
 
+		/* Visible */
 		const bool isVisible();
+		void setVisible(const bool visible);
+
+		/* Size (Width + Height) */
+		const std::array<GLfloat, 2> getSize();
+		void setSize(const GLfloat Width, const GLfloat Height, const SizeType sizeType);
+
+		/* Width */
+		const GLfloat getWidth();
+		const GLfloat getMinWidth();
+		void setWidth(const GLfloat Width, const SizeType sizeType);
+		void setMinWidth(const GLfloat minWidth, const SizeType sizeType);
+
+		/* Height */
+		const GLfloat getHeight();
+		const GLfloat getMinHeight();
+		void setHeight(const GLfloat Height, const SizeType sizeType);
+		void setMinHeight(const GLfloat minHeight, const SizeType sizeType);
+		
+		/* Position (X + Y) */
+		const std::array<GLfloat, 2> getPosition();
+		void setPosition(const GLfloat x, const GLfloat y, const SizeType sizeType);
+
+		/* X */
+		const GLfloat getPosX();
+		void setPosX(const GLfloat x, const SizeType sizeType);
+
+		/* Y */
+		const GLfloat getPosY();
+		void setPosY(const GLfloat y, const SizeType sizeType);
+
+		/* Alignments (ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT) */
+		const std::array<GLfloat, 4> getAlignments();
+		void addAlignment(const Alignment alignment, const GLfloat offset);
+
+		/* Color */
+		void setColor(GLfloat color[4]);
 
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};
@@ -49,11 +69,22 @@ class Panel {
 
 		virtual void addChar(const char c) {};
 		virtual void removeChar() {};
+	private:
+		void updatePanel();
+		void updatePanelChild(Panel* pParent);
+		void updatePanelQuad(Panel* panelParent, Panel* panel);
 
 	protected:
 		PanelType type = PANEL;
-		GLdouble x = 0, y = 0;
-		GLdouble Width = 0, Height = 0;
+
+		GLfloat x = 0, y = 0;
+		SizeType posXType = SIZE_PIXEL, posYType = SIZE_PIXEL;
+		
+		GLfloat Width = 0, Height = 0;
+		SizeType widthType = SIZE_PIXEL, heightType = SIZE_PIXEL;
+
+		GLfloat minWidth = 0, minHeight = 0;
+		SizeType minWidthType = SIZE_PIXEL, minHeightType = SIZE_PIXEL;
 };
 
 #endif

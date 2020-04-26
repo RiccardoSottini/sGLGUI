@@ -1,6 +1,6 @@
 #include "Window.h"
 
-Window::Window(Gui* gui, const double Width, const double Height, const char* name) {
+Window::Window(Gui* gui, const GLfloat Width, const GLfloat Height, const char* name) {
 	this->gui = gui;
 	this->window = glfwCreateWindow(Width, Height, name, NULL, NULL);
 	setSize(Width, Height);
@@ -16,11 +16,11 @@ Window::Window(Gui* gui, const double Width, const double Height, const char* na
 	addPanelQuad(&this->windowPanel.pQuad);
 }
 
-void Window::setSize(const double Width, const double Height) {
+void Window::setSize(const GLfloat Width, const GLfloat Height) {
 	this->Width = Width;
 	this->Height = Height;
 
-	this->windowPanel.setSize(Width, Height);
+	this->windowPanel.setSize(Width, Height, SIZE_PIXEL);
 }
 
 void Window::setVisible(const bool visible) {
@@ -39,7 +39,7 @@ Panel* Window::getWindowPanel() {
 	return &windowPanel;
 }
 
-Panel* Window::getPanelClicked(Panel* panel, const double posX, const double posY) {
+Panel* Window::getPanelClicked(Panel* panel, const GLfloat posX, const GLfloat posY) {
 	for(int i = panel->list.size() - 1; i >= 0; i--) {
 		Panel* selected = panel->list[i];
 
@@ -52,11 +52,11 @@ Panel* Window::getPanelClicked(Panel* panel, const double posX, const double pos
 	return panel;
 }
 
-const GLdouble Window::getWidth() {
+const GLfloat Window::getWidth() {
 	return Width;
 }
 
-const GLdouble Window::getHeight() {
+const GLfloat Window::getHeight() {
 	return Height;
 }
 
@@ -68,7 +68,7 @@ const char* vertexSource = R"glsl(
 	#version 450 core
 
 	layout(location = 0) uniform vec2 WindowSize;
-	layout(location = 1) in vec4 vPosition;
+	layout(location = 1) in vec2 vPosition;
 	layout(location = 2) in vec4 vColor;
 
 	out vec4 fs_color;
@@ -76,8 +76,8 @@ const char* vertexSource = R"glsl(
 	void main() {
 		fs_color = vColor;
 
-		gl_Position[0] = (((vPosition[0] >= 0) ? vPosition[0] : WindowSize[0] + vPosition[0] + 1) / (WindowSize[0] / 2.0)) - 1;
-		gl_Position[1] = 1 - (((vPosition[1] >= 0) ? vPosition[1] : WindowSize[1] + vPosition[1] + 1) / (WindowSize[1] / 2.0));
+		gl_Position[0] = (vPosition[0] / (WindowSize[0] / 2.0)) - 1;
+		gl_Position[1] = 1 - (vPosition[1] / (WindowSize[1] / 2.0));
 		gl_Position[2] = 0.0;
 		gl_Position[3] = 1.0;
 	}
@@ -144,47 +144,47 @@ void Window::updateVertices(int n_quad) {
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 
 	if(panelsQuad[n_quad]->visible) {
-		GLdouble* size = panelsQuad[n_quad]->quadSize;
-		GLdouble* pos = panelsQuad[n_quad]->quadPos;
 		GLfloat* color = panelsQuad[n_quad]->quadColor;
-		std::array<GLdouble, 4> alignments = panelsQuad[n_quad]->alignments;
+		std::array<GLfloat, 4> lines = panelsQuad[n_quad]->lines;
 
-		GLdouble line[4] = {
-			(alignments[ALIGN_TOP] >= 0) ? alignments[ALIGN_TOP] : pos[1],
-			(alignments[ALIGN_BOTTOM] >= 0) ? -alignments[ALIGN_BOTTOM] - 1 : line[ALIGN_TOP] + size[1],
-			(alignments[ALIGN_LEFT] >= 0) ? alignments[ALIGN_LEFT] : pos[0],
-			(alignments[ALIGN_RIGHT] >= 0) ? -alignments[ALIGN_RIGHT] - 1 : line[ALIGN_LEFT] + size[0]
-		};
-
-		std::vector<GLfloat> data = {
-			line[ALIGN_LEFT], line[ALIGN_TOP],
-			line[ALIGN_RIGHT], line[ALIGN_TOP],
-			line[ALIGN_RIGHT], line[ALIGN_BOTTOM],
-			line[ALIGN_LEFT], line[ALIGN_BOTTOM]
+		std::vector<GLfloat> vertex = {
+			lines[2], lines[0],
+			lines[3], lines[0],
+			lines[3], lines[1],
+			lines[2], lines[1]
 		};
 
 		for(int v = 0; v < 4; v++) {
-			GLfloat vertex[6] = {data[v*2], data[(v*2)+1], color[0], color[1], color[2], color[3]};
-			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(vertex)), sizeof(vertex), &vertex);
+			GLfloat data[6] = {vertex[v*2], vertex[(v*2)+1], color[0], color[1], color[2], color[3]};
+			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(data)), sizeof(data), &data);
 		}
 	} else {
 		// Clear PanelQuad
 		for(int v = 0; v < 4; v++) {
-			GLfloat vertex[2] = {0.0, 0.0};
-			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(GLfloat) * 6), sizeof(vertex), &vertex);
+			GLfloat data[2] = {0.0, 0.0};
+			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(GLfloat) * 6), sizeof(data), &data);
 		}
 	}
 }
 
-void Window::ResizeWindow(int offset_width, int offset_height) {
+void Window::ResizeWindow(int Width, int Height) {
 	glfwMakeContextCurrent(window);
 
-	setSize(Width + offset_width, Height + offset_height);
+	setSize(Width, Height);
 
 	glViewport(0, 0, Width, Height);
 
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	glUniform2f(0, Width, Height);
+
+	//DISPLAY INSTRUCTIONS (Without calling Display Function)
+	static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	glClearBufferfv(GL_COLOR, 0, black);
+
+	glBindVertexArray(VAOs[0]);
+	glDrawArrays(GL_QUADS, 0, n_quads * 8);
+
+	glfwSwapBuffers(window);
 }
 
 void Window::Display() {
@@ -195,4 +195,6 @@ void Window::Display() {
 
 	glBindVertexArray(VAOs[0]);
 	glDrawArrays(GL_QUADS, 0, n_quads * 8);
+
+	glfwSwapBuffers(window);
 }
