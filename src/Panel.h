@@ -74,6 +74,7 @@ class Panel {
 
 		virtual void addChar(const char c) {};
 		virtual void removeChar() {};
+
 	private:
 		void updatePanelChild(Panel* pParent);
 		void updatePanelQuad(Panel* panelParent, Panel* panel);

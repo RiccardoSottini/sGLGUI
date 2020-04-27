@@ -8,8 +8,8 @@ Gui::Gui() {
 }
 
 void Gui::EventLoop() {
-	auto WindowSizeCallBack = [](GLFWwindow * window, int width, int height) {
-		static_cast<Window*>(glfwGetWindowUserPointer(window))->ResizeWindow(width, height);
+	auto WindowSizeCallBack = [](GLFWwindow* window, int Width, int Height) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))->setSize(Width, Height);
 	};
 
     while(true) {
@@ -25,9 +25,7 @@ void Gui::EventLoop() {
             if(offsetWidth || offsetHeight)
                 windows[i]->ResizeWindow(offsetWidth, offsetHeight);*/
 
-			glfwSetWindowUserPointer(windows[i]->getWindow(), windows[i]);
-
-            windows[i]->Display();
+			windows[i]->Display();
 
             /*glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);
             glfwSetCharCallback(windows[i]->getWindow(), inputEvent.CharCallBack);
@@ -36,7 +34,8 @@ void Gui::EventLoop() {
             glfwSetMouseButtonCallback(windows[i]->getWindow(), inputEvent.MouseButtonCallBack);
             glfwSetScrollCallback(windows[i]->getWindow(), inputEvent.ScrollCallBack);*/
 
-            glfwSetWindowSizeCallback(windows[i]->getWindow(), WindowSizeCallBack);
+			glfwSetWindowUserPointer(windows[i]->getWindow(), windows[i]);
+			glfwSetWindowSizeCallback(windows[i]->getWindow(), WindowSizeCallBack);
         }
 
         //inputEvent.getEvents();

@@ -14,38 +14,48 @@ class Gui;
 class Window {
 	public:
 		Window(Gui* gui, const GLfloat Width, const GLfloat Height, const char* name);
-		void setSize(const GLfloat Width, const GLfloat Height);
-		void setVisible(const bool visible);
-		void addPanel(Panel* panel);
 
 		GLFWwindow* getWindow();
 		Panel* getWindowPanel();
-		Panel* getPanelClicked(Panel* panel, const GLfloat posX, const GLfloat posY);
 
-		const GLfloat getWidth();
-		const GLfloat getHeight();
-
+		/* Visibile */
 		const bool isVisible();
+		void setVisible(const bool visible);
 
-		std::map<std::array<int, 3>, void(*)()> slots;
+		/* Size (Width + Height) */
+		const std::array<GLfloat, 2> getSize();
+		void setSize(const GLfloat Width, const GLfloat Height);
 
-		const int MAX_PANELS = 64; //64 panels
-		int n_quads = 0;
+		/* Width */
+		const GLfloat getWidth();
+		const GLfloat getMinWidth();
+		void setWidth(const GLfloat Width);
+		void setMinWidth(const GLfloat Width);
 
-		std::vector<PanelQuad*> panelsQuad;
+		/* Height */
+		const GLfloat getHeight();
+		const GLfloat getMinHeight();
+		void setHeight(const GLfloat Height);
+		void setMinHeight(const GLfloat Height);
 
+		/* Panel */
+		void addPanel(Panel* panel);
 		void addPanelQuad(PanelQuad* pQuad);
-		void updateVertices(int n_quad);
+		Panel* getPanelClicked(Panel* panel, const GLfloat posX, const GLfloat posY);
 
 		void InitGL();
 		void SetupShaders();
-		void ResizeWindow(int Width, int Height);
 		void Display();
+		void ResizeWindow(int Width, int Height);
+		void updateVertices(int n_quad);
+
+		Panel* selectedPanel;
+		std::vector<PanelQuad*> panelsQuad;
+
+		std::map<std::array<int, 3>, void(*)()> slots;
 
 		GLuint Buffers[1];
 		GLuint VAOs[1];
-
-		Panel* selectedPanel;
 
 	private:
 		Gui* gui;
@@ -53,9 +63,13 @@ class Window {
 		GLFWwindow* window = nullptr;
 		GLuint shaderProgram;
 
-		GLfloat Width, Height;
+		GLfloat Width = 0, Height = 0;
+		GLfloat minWidth = 0, minHeight = 0;
 		char* name = nullptr;
 		bool visible = true;
+
+		const int MAX_PANELS = 64; //64 panels
+		int n_quads = 0;
 };
 
 #endif

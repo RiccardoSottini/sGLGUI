@@ -176,14 +176,14 @@ void Panel::addAlignment(Alignment alignment, const GLfloat offset) {
 }
 
 void Panel::setColor(GLfloat color[4]) {
-	for (int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)
 		this->pQuad.quadColor[i] = color[i];
 
 	updatePanel();
 }
 
 void Panel::updatePanel() {
-	if (this->pQuad.n_quad != -1) {
+	if(this->pQuad.n_quad != -1) {
 		updatePanelQuad(this->panelParent, this);
 		this->windowParent->updateVertices(this->pQuad.n_quad);
 	}
@@ -192,7 +192,7 @@ void Panel::updatePanel() {
 void Panel::updatePanelChild(Panel* pChild) {
 	pChild->updatePanel();
 
-	for (int i = 0; i < pChild->list.size(); i++)
+	for(int i = 0; i < pChild->list.size(); i++)
 		updatePanelChild(pChild->list[i]);
 }
 

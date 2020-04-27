@@ -34,9 +34,16 @@ int main() {
 	for(int i = 0; i < vec_alignments.size(); i++)
 		std::cout << "Alignment[" << i << "]: " << vec_alignments[i] << '\n';
 
+	w.setMinWidth(600);
+	w.setMinHeight(500);
+	w.setHeight(600);
+	w.setWidth(400);
+
 	Panel p(&w);
 	p.setPosition(10, 10, SIZE_PERCENT);
-	p.setSize(80, 80, SIZE_PERCENT);
+	p.addAlignment(ALIGN_RIGHT, 0);
+	p.addAlignment(ALIGN_BOTTOM, 0);
+	//p.setSize(80, 80, SIZE_PERCENT);
 	p.setMinHeight(300, SIZE_PIXEL);
 	p.setMinWidth(300, SIZE_PIXEL);
 	p.setColor(colorRed);
