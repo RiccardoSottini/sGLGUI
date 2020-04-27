@@ -13,7 +13,9 @@ Window::Window(Gui* gui, const GLfloat Width, const GLfloat Height, const char* 
 
 	this->windowPanel.windowParent = this;
 	this->windowPanel.panelParent = &this->windowPanel;
-	addPanelQuad(&this->windowPanel.pQuad);
+
+	this->addPanelQuad(&this->windowPanel.pQuad);
+	this->windowPanel.updatePanel();
 }
 
 void Window::setSize(const GLfloat Width, const GLfloat Height) {

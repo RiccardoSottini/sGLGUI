@@ -49,12 +49,15 @@ int main() {
 	Panel p3(&p);
 	p3.setPosY(50, SIZE_PERCENT);
 	p3.setSize(50, 50, SIZE_PERCENT);
+	p3.setPosX(50, SIZE_PIXEL);
 	p3.setColor(colorBlue);
 
 	Panel p4(&p2);
 	p4.addAlignment(ALIGN_BOTTOM, 0);
 	p4.setSize(100, 100, SIZE_PIXEL);
 	p4.setColor(colorWhite);
+
+	std::cout << "POS " << p4.getPosY(SIZE_PIXEL, VALUE_CALCULATED);
 
 	gui->EventLoop();
 

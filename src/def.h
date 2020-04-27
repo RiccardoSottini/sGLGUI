@@ -1,12 +1,19 @@
 #ifndef DEF_H
 #define DEF_H
 
+/* Size Type */
 enum SizeType {
 	SIZE_PIXEL,
 	SIZE_PERCENT
 };
 
-/* type */
+/* Value Type */
+enum ValueType {
+	VALUE_SETTED,
+	VALUE_CALCULATED
+};
+
+/* Type */
 enum Type {
 	INPUT_KEY,
 	INPUT_CHAR,

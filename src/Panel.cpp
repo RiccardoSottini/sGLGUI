@@ -116,7 +116,22 @@ void Panel::setPosition(const GLfloat x, const GLfloat y, const SizeType sizeTyp
 }
 
 const GLfloat Panel::getPosX() {
-	return (this->posXType == SIZE_PIXEL) ? this->x : (panelParent->getWidth() / 100) * this->x;
+	return this->pQuad.lines[2] - panelParent->pQuad.lines[2];
+}
+
+const GLfloat Panel::getPosX(SizeType sizeType) {
+	return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((this->pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
+}
+
+const GLfloat Panel::getPosX(SizeType sizeType, ValueType valueType) {
+	if(valueType == VALUE_CALCULATED)
+		return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((this->pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
+	else if(valueType == VALUE_SETTED) {
+		if(sizeType == SIZE_PIXEL)
+			return (this->posXType == SIZE_PIXEL) ? this->x : (panelParent->getWidth() / 100) * this->x;
+		else if(sizeType == SIZE_PERCENT)
+			return (this->posXType == SIZE_PERCENT) ? this->x : (this->x / panelParent->getWidth()) * 100;
+	}
 }
 
 void Panel::setPosX(const GLfloat x, const SizeType sizeType) {
@@ -127,7 +142,22 @@ void Panel::setPosX(const GLfloat x, const SizeType sizeType) {
 }
 
 const GLfloat Panel::getPosY() {
-	return (this->posYType == SIZE_PIXEL) ? this->y : (panelParent->getHeight() / 100) * this->y;
+	return this->pQuad.lines[0] - panelParent->pQuad.lines[0];
+}
+
+const GLfloat Panel::getPosY(SizeType sizeType) {
+	return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((this->pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
+}
+
+const GLfloat Panel::getPosY(SizeType sizeType, ValueType valueType) {
+	if(valueType == VALUE_CALCULATED)
+		return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((this->pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
+	else if(valueType == VALUE_SETTED) {
+		if(sizeType == SIZE_PIXEL)
+			return (this->posYType == SIZE_PIXEL) ? this->y : (panelParent->getHeight() / 100) * this->y;
+		else if(sizeType == SIZE_PERCENT)
+			return (this->posYType == SIZE_PERCENT) ? this->y : (this->y / panelParent->getHeight()) * 100;
+	}
 }
 
 void Panel::setPosY(const GLfloat y, const SizeType sizeType) {
@@ -180,7 +210,7 @@ void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
 	else if (panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
 		panel->pQuad.lines[0] = (pParent->pQuad.lines[1] - panel->pQuad.alignments[ALIGN_BOTTOM]) - panel->getHeight();
 	else
-		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->getPosY();
+		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->getPosY(SIZE_PIXEL, VALUE_SETTED);
 
 	//Bottom Line
 	if (panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
@@ -194,7 +224,7 @@ void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
 	else if (panel->pQuad.alignments[ALIGN_RIGHT] != -1)
 		panel->pQuad.lines[2] = (pParent->pQuad.lines[3] - panel->pQuad.alignments[ALIGN_RIGHT]) - panel->getWidth();
 	else
-		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->getPosX();
+		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->getPosX(SIZE_PIXEL, VALUE_SETTED);
 
 	//Right Line
 	if (panel->pQuad.alignments[ALIGN_RIGHT] != -1)

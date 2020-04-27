@@ -6,11 +6,11 @@
 #include <string>
 
 struct PanelQuad {
-	bool visible = true;
-	int n_quad = -1;
-	GLfloat quadColor[4] {0.0, 0.0, 0.0, 1.0};
-	std::array<GLfloat, 4> alignments = { -1, -1, -1, -1 };
-	std::array<GLfloat, 4> lines = { 0.0, 0.0, 0.0, 0.0 };
+	bool visible = true;	//by default the panel is visible
+	int n_quad = -1;		//by default the panel is not binded with a window
+	GLfloat quadColor[4] { 0.941176, 0.941176, 0.941176, 1.0 };	//default panel color
+	std::array<GLfloat, 4> alignments = { -1, -1, -1, -1 };		//default panel alignments (-1, -1, -1, -1) -> no alignments setted
+	std::array<GLfloat, 4> lines = { 0.0, 0.0, 0.0, 0.0 };		//default panel lines to make the Quad
 };
 
 class Panel {
@@ -21,6 +21,7 @@ class Panel {
 
 		void addPanel(Panel* panel);
 		const PanelType getPanelType();
+		void updatePanel();
 
 		/* Visible */
 		const bool isVisible();
@@ -48,10 +49,14 @@ class Panel {
 
 		/* X */
 		const GLfloat getPosX();
+		const GLfloat getPosX(SizeType sizeType);
+		const GLfloat getPosX(SizeType sizeType, ValueType valueType);
 		void setPosX(const GLfloat x, const SizeType sizeType);
 
 		/* Y */
 		const GLfloat getPosY();
+		const GLfloat getPosY(SizeType sizeType);
+		const GLfloat getPosY(SizeType sizeType, ValueType valueType);
 		void setPosY(const GLfloat y, const SizeType sizeType);
 
 		/* Alignments (ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT) */
@@ -70,7 +75,6 @@ class Panel {
 		virtual void addChar(const char c) {};
 		virtual void removeChar() {};
 	private:
-		void updatePanel();
 		void updatePanelChild(Panel* pParent);
 		void updatePanelQuad(Panel* panelParent, Panel* panel);
 
