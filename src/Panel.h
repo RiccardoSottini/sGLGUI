@@ -33,12 +33,14 @@ class Panel {
 
 		/* Width */
 		const GLfloat getWidth();
+		const GLfloat getWidth(ValueType valueType);
 		const GLfloat getMinWidth();
 		void setWidth(const GLfloat Width, const SizeType sizeType);
 		void setMinWidth(const GLfloat minWidth, const SizeType sizeType);
 
 		/* Height */
 		const GLfloat getHeight();
+		const GLfloat getHeight(ValueType valueType);
 		const GLfloat getMinHeight();
 		void setHeight(const GLfloat Height, const SizeType sizeType);
 		void setMinHeight(const GLfloat minHeight, const SizeType sizeType);
@@ -76,8 +78,8 @@ class Panel {
 		virtual void removeChar() {};
 
 	private:
-		void updatePanelChild(Panel* pParent);
-		void updatePanelQuad(Panel* panelParent, Panel* panel);
+		void updatePanelChildren(Panel* pParent);
+		void updatePanelQuad(Panel* pParent, Panel* panel);
 
 	protected:
 		PanelType type = PANEL;

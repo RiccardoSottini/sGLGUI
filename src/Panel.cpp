@@ -7,20 +7,20 @@ Panel::Panel() {
 }
 
 Panel::Panel(Window* windowParent) : windowParent(windowParent) {
-	this->windowParent->getWindowPanel()->addPanel(this);
+	windowParent->getWindowPanel()->addPanel(this);
 }
 
 Panel::Panel(Panel* panelParent) : panelParent(panelParent) {
-	this->panelParent->addPanel(this);
+	panelParent->addPanel(this);
 }
 
 void Panel::addPanel(Panel* panel) {
-	this->list.push_back(panel);
-	panel->windowParent = this->windowParent;
+	list.push_back(panel);
+	panel->windowParent = windowParent;
 	panel->panelParent = this;
 
 	updatePanelQuad(this, panel);
-	this->windowParent->addPanelQuad(&panel->pQuad);
+	windowParent->addPanelQuad(&panel->pQuad);
 }
 
 const PanelType Panel::getPanelType() {
@@ -28,143 +28,167 @@ const PanelType Panel::getPanelType() {
 }
 
 const bool Panel::isVisible() { 
-	return this->pQuad.visible; 
+	return pQuad.visible; 
 }
 
 void Panel::setVisible(const bool visible) {
-	this->pQuad.visible = visible;
+	pQuad.visible = visible;
 
 	updatePanel();
 }
 
 const std::array<GLfloat, 2> Panel::getSize() {
-	return std::array<GLfloat, 2> { this->getWidth(), this->getHeight() };
+	return std::array<GLfloat, 2> { getWidth(), getHeight() };
 }
 
 void Panel::setSize(const GLfloat Width, const GLfloat Height, const SizeType sizeType) {
 	this->Width = Width;
 	this->Height = Height;
-	this->widthType = sizeType;
-	this->heightType = sizeType;
+	widthType = sizeType;
+	heightType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const GLfloat Panel::getWidth() {
-	if(this->widthType == SIZE_PIXEL) {
-		return (this->Width >= this->getMinWidth()) ? this->Width : this->getMinWidth();
-	} else if(this->widthType == SIZE_PERCENT) {
-		return (((panelParent->getWidth() / 100) * this->Width) >= this->getMinWidth()) ? ((panelParent->getWidth() / 100) * this->Width) : this->getMinWidth();
+	if(widthType == SIZE_PIXEL) {
+		return (Width >= getMinWidth()) ? Width : getMinWidth();
+	} else if(widthType == SIZE_PERCENT) {
+		return (((panelParent->getWidth() / 100) * Width) >= getMinWidth()) ? ((panelParent->getWidth() / 100) * Width) : getMinWidth();
+	}
+}
+
+const GLfloat Panel::getWidth(ValueType valueType) {
+	if(valueType == VALUE_CALCULATED)
+		return pQuad.lines[3] - pQuad.lines[2];
+	else if(valueType == VALUE_SETTED) {
+		if(widthType == SIZE_PIXEL) {
+			return (Width >= getMinWidth()) ? Width : getMinWidth();
+		} else if(widthType == SIZE_PERCENT) {
+			return (((panelParent->getWidth() / 100) * Width) >= getMinWidth()) ? ((panelParent->getWidth() / 100) * Width) : getMinWidth();
+		}
 	}
 }
 
 const GLfloat Panel::getMinWidth() {
-	return (this->minWidthType == SIZE_PIXEL) ? this->minWidth : (panelParent->getWidth() / 100) * this->minWidth;
+	return (minWidthType == SIZE_PIXEL) ? minWidth : (panelParent->getWidth() / 100) * minWidth;
 }
 
 void Panel::setWidth(const GLfloat Width, const SizeType sizeType) {
 	this->Width = Width;
-	this->widthType = sizeType;
+	widthType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 void Panel::setMinWidth(const GLfloat minWidth, const SizeType sizeType) {
 	this->minWidth = minWidth;
-	this->minWidthType = sizeType;
+	minWidthType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const GLfloat Panel::getHeight() {
-	if(this->heightType == SIZE_PIXEL) {
-		return (this->Height >= this->getMinHeight()) ? this->Height : this->getMinHeight();
+	if(heightType == SIZE_PIXEL) {
+		return (Height >= getMinHeight()) ? Height : getMinHeight();
 	} else if(this->heightType == SIZE_PERCENT) {
-		return (((panelParent->getHeight() / 100) * this->Height) >= this->getMinHeight()) ? ((panelParent->getHeight() / 100) * this->Height) : this->getMinHeight();
+		return (((panelParent->getHeight() / 100) * Height) >= getMinHeight()) ? ((panelParent->getHeight() / 100) * Height) : getMinHeight();
+	}
+}
+
+const GLfloat Panel::getHeight(ValueType valueType) {
+	if(valueType == VALUE_CALCULATED)
+		return pQuad.lines[1] - pQuad.lines[0];
+	else if(valueType == VALUE_SETTED) {
+		if(heightType == SIZE_PIXEL) {
+			return (Height >= getMinHeight()) ? Height : getMinHeight();
+		} else if(heightType == SIZE_PERCENT) {
+			return (((panelParent->getHeight() / 100) * Height) >= getMinHeight()) ? ((panelParent->getHeight() / 100) * Height) : getMinHeight();
+		}
 	}
 }
 
 const GLfloat Panel::getMinHeight() {
-	return (this->minHeightType == SIZE_PIXEL) ? this->minHeight : (panelParent->getHeight() / 100) * this->minHeight;
+	return (minHeightType == SIZE_PIXEL) ? minHeight : (panelParent->getHeight() / 100) * minHeight;
 }
 
 void Panel::setHeight(const GLfloat Height, const SizeType sizeType) {
 	this->Height = Height;
-	this->heightType = sizeType;
+	heightType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 void Panel::setMinHeight(const GLfloat minHeight, const SizeType sizeType) {
 	this->minHeight = minHeight;
-	this->minHeightType = sizeType;
+	minHeightType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const std::array<GLfloat, 2> Panel::getPosition() {
-	return std::array<GLfloat, 2> { this->getPosX(), this->getPosY() };
+	return std::array<GLfloat, 2> { getPosX(), getPosY() };
 }
 
 void Panel::setPosition(const GLfloat x, const GLfloat y, const SizeType sizeType) {
 	this->x = x;
 	this->y = y;
-	this->posXType = sizeType;
-	this->posYType = sizeType;
+	posXType = sizeType;
+	posYType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const GLfloat Panel::getPosX() {
-	return this->pQuad.lines[2] - panelParent->pQuad.lines[2];
+	return pQuad.lines[2] - panelParent->pQuad.lines[2];
 }
 
 const GLfloat Panel::getPosX(SizeType sizeType) {
-	return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((this->pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
+	return (sizeType == SIZE_PIXEL) ? (pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
 }
 
 const GLfloat Panel::getPosX(SizeType sizeType, ValueType valueType) {
 	if(valueType == VALUE_CALCULATED)
-		return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((this->pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
+		return (sizeType == SIZE_PIXEL) ? (pQuad.lines[2] - panelParent->pQuad.lines[2]) : ((pQuad.lines[2] - panelParent->pQuad.lines[2]) / panelParent->getWidth()) * 100;
 	else if(valueType == VALUE_SETTED) {
 		if(sizeType == SIZE_PIXEL)
-			return (this->posXType == SIZE_PIXEL) ? this->x : (panelParent->getWidth() / 100) * this->x;
+			return (posXType == SIZE_PIXEL) ? x : (panelParent->getWidth() / 100) * x;
 		else if(sizeType == SIZE_PERCENT)
-			return (this->posXType == SIZE_PERCENT) ? this->x : (this->x / panelParent->getWidth()) * 100;
+			return (posXType == SIZE_PERCENT) ? x : (x / panelParent->getWidth()) * 100;
 	}
 }
 
 void Panel::setPosX(const GLfloat x, const SizeType sizeType) {
 	this->x = x;
-	this->posXType = sizeType;
+	posXType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const GLfloat Panel::getPosY() {
-	return this->pQuad.lines[0] - panelParent->pQuad.lines[0];
+	return pQuad.lines[0] - panelParent->pQuad.lines[0];
 }
 
 const GLfloat Panel::getPosY(SizeType sizeType) {
-	return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((this->pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
+	return (sizeType == SIZE_PIXEL) ? (pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
 }
 
 const GLfloat Panel::getPosY(SizeType sizeType, ValueType valueType) {
 	if(valueType == VALUE_CALCULATED)
-		return (sizeType == SIZE_PIXEL) ? (this->pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((this->pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
+		return (sizeType == SIZE_PIXEL) ? (pQuad.lines[0] - panelParent->pQuad.lines[0]) : ((pQuad.lines[0] - panelParent->pQuad.lines[0]) / panelParent->getHeight()) * 100;
 	else if(valueType == VALUE_SETTED) {
 		if(sizeType == SIZE_PIXEL)
-			return (this->posYType == SIZE_PIXEL) ? this->y : (panelParent->getHeight() / 100) * this->y;
+			return (posYType == SIZE_PIXEL) ? y : (panelParent->getHeight() / 100) * y;
 		else if(sizeType == SIZE_PERCENT)
-			return (this->posYType == SIZE_PERCENT) ? this->y : (this->y / panelParent->getHeight()) * 100;
+			return (posYType == SIZE_PERCENT) ? y : (y / panelParent->getHeight()) * 100;
 	}
 }
 
 void Panel::setPosY(const GLfloat y, const SizeType sizeType) {
 	this->y = y;
-	this->posYType = sizeType;
+	posYType = sizeType;
 
-	updatePanelChild(this);
+	updatePanelChildren(this);
 }
 
 const std::array<GLfloat, 4> Panel::getAlignments() {
@@ -173,27 +197,29 @@ const std::array<GLfloat, 4> Panel::getAlignments() {
 
 void Panel::addAlignment(Alignment alignment, const GLfloat offset) {
 	pQuad.alignments[alignment] = offset;
+
+	updatePanelChildren(this);
 }
 
 void Panel::setColor(GLfloat color[4]) {
 	for(int i = 0; i < 4; i++)
-		this->pQuad.quadColor[i] = color[i];
+		pQuad.quadColor[i] = color[i];
 
 	updatePanel();
 }
 
 void Panel::updatePanel() {
-	if(this->pQuad.n_quad != -1) {
-		updatePanelQuad(this->panelParent, this);
-		this->windowParent->updateVertices(this->pQuad.n_quad);
+	if(pQuad.n_quad != -1) {
+		updatePanelQuad(panelParent, this);
+		windowParent->updateVertices(pQuad.n_quad);
 	}
 }
 
-void Panel::updatePanelChild(Panel* pChild) {
-	pChild->updatePanel();
+void Panel::updatePanelChildren(Panel* pParent) {
+	pParent->updatePanel();
 
-	for(int i = 0; i < pChild->list.size(); i++)
-		updatePanelChild(pChild->list[i]);
+	for(int i = 0; i < pParent->list.size(); i++)
+		updatePanelChildren(pParent->list[i]);
 }
 
 void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
@@ -205,33 +231,45 @@ void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
 	 */
 
 	 //Top Line
-	if (panel->pQuad.alignments[ALIGN_TOP] != -1)
+	if(panel->pQuad.alignments[ALIGN_TOP] != -1)
 		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->pQuad.alignments[ALIGN_TOP];
-	else if (panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
-		panel->pQuad.lines[0] = (pParent->pQuad.lines[1] - panel->pQuad.alignments[ALIGN_BOTTOM]) - panel->getHeight();
+	else if(panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
+		panel->pQuad.lines[0] = ((pParent->pQuad.lines[0] + pParent->getHeight()) - panel->pQuad.alignments[ALIGN_BOTTOM]) - panel->getHeight(VALUE_SETTED);
 	else
 		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->getPosY(SIZE_PIXEL, VALUE_SETTED);
 
 	//Bottom Line
-	if (panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
-		panel->pQuad.lines[1] = pParent->pQuad.lines[1] - panel->pQuad.alignments[ALIGN_BOTTOM];
+	if(panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
+		panel->pQuad.lines[1] = (pParent->pQuad.lines[0] + pParent->getHeight()) - panel->pQuad.alignments[ALIGN_BOTTOM];
 	else
 		panel->pQuad.lines[1] = panel->pQuad.lines[0] + panel->getHeight();
 
 	//Left Line
-	if (panel->pQuad.alignments[ALIGN_LEFT] != -1)
+	if(panel->pQuad.alignments[ALIGN_LEFT] != -1)
 		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->pQuad.alignments[ALIGN_LEFT];
-	else if (panel->pQuad.alignments[ALIGN_RIGHT] != -1)
-		panel->pQuad.lines[2] = (pParent->pQuad.lines[3] - panel->pQuad.alignments[ALIGN_RIGHT]) - panel->getWidth();
+	else if(panel->pQuad.alignments[ALIGN_RIGHT] != -1)
+		panel->pQuad.lines[2] = ((pParent->pQuad.lines[2] + pParent->getWidth()) - panel->pQuad.alignments[ALIGN_RIGHT]) - panel->getWidth();
 	else
 		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->getPosX(SIZE_PIXEL, VALUE_SETTED);
 
 	//Right Line
-	if (panel->pQuad.alignments[ALIGN_RIGHT] != -1)
-		panel->pQuad.lines[3] = pParent->pQuad.lines[3] - panel->pQuad.alignments[ALIGN_RIGHT];
+	if(panel->pQuad.alignments[ALIGN_RIGHT] != -1)
+		panel->pQuad.lines[3] = (pParent->pQuad.lines[2] + pParent->getWidth()) - panel->pQuad.alignments[ALIGN_RIGHT];
 	else
 		panel->pQuad.lines[3] = panel->pQuad.lines[2] + panel->getWidth();
 
+	if(panel->pQuad.lines[0] < pParent->pQuad.lines[0]) panel->pQuad.lines[0] = pParent->pQuad.lines[0];
+	if(panel->pQuad.lines[1] > pParent->pQuad.lines[1]) panel->pQuad.lines[1] = pParent->pQuad.lines[1];
+	if(panel->pQuad.lines[2] < pParent->pQuad.lines[2]) panel->pQuad.lines[2] = pParent->pQuad.lines[2];
+	if(panel->pQuad.lines[3] > pParent->pQuad.lines[3]) panel->pQuad.lines[3] = pParent->pQuad.lines[3];
+
 	//Visibility Conditions
-	if (!pParent->pQuad.visible) panel->pQuad.visible = false;
+	if((!pParent->isVisible())
+	|| (panel->pQuad.lines[1] < panel->pQuad.lines[0])
+	|| (panel->pQuad.lines[3] < panel->pQuad.lines[2])) {
+		panel->pQuad.visible = false;
+	} else {
+		panel->pQuad.visible = true;
+	}
+
 }

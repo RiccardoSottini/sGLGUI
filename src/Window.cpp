@@ -8,19 +8,19 @@ Window::Window(Gui* gui, const GLfloat Width, const GLfloat Height, const char* 
 	gui->windows.push_back(this);
 	gui->glfw_windows[this->window] = this;
 
-	this->InitGL();
+	InitGL();
 
-	this->windowPanel.windowParent = this;
-	this->windowPanel.panelParent = &this->windowPanel;
+	windowPanel.windowParent = this;
+	windowPanel.panelParent = &windowPanel;
 
-	this->addPanelQuad(&this->windowPanel.pQuad);
-	this->windowPanel.updatePanel();
+	addPanelQuad(&this->windowPanel.pQuad);
+	windowPanel.updatePanel();
 
-	this->setSize(Width, Height);
+	setSize(Width, Height);
 }
 
 GLFWwindow* Window::getWindow() {
-	return this->window;
+	return window;
 }
 
 Panel* Window::getWindowPanel() {
@@ -28,7 +28,7 @@ Panel* Window::getWindowPanel() {
 }
 
 const bool Window::isVisible() {
-	return this->visible;
+	return visible;
 }
 
 void Window::setVisible(const bool visible) {
@@ -40,67 +40,69 @@ const std::array<GLfloat, 2> Window::getSize() {
 }
 
 void Window::setSize(const GLfloat Width, const GLfloat Height) {
-	this->Width = (Width >= this->minWidth) ? Width : this->minWidth;
-	this->Height = (Height >= this->minHeight) ? Height : this->minHeight;
-
-	this->ResizeWindow(this->Width, this->Height);
+	this->Width = (Width >= minWidth) ? Width : minWidth;
+	this->Height = (Height >= minHeight) ? Height : minHeight;
 
 	glfwSetWindowSize(window, this->Width, this->Height);
-	this->windowPanel.setSize(this->Width, this->Height, SIZE_PIXEL);
+	windowPanel.setSize(this->Width, this->Height, SIZE_PIXEL);
+
+	ResizeWindow(this->Width, this->Height);
 }
 
 const GLfloat Window::getWidth() {
-	return this->Width;
+	return Width;
 }
 
 const GLfloat Window::getMinWidth() {
-	return this->minWidth;
+	return minWidth;
 }
 
 void Window::setWidth(const GLfloat Width) {
-	this->Width = (Width >= this->minWidth) ? Width : this->minWidth;
-
-	this->ResizeWindow(this->Width, this->Height);
+	this->Width = (Width >= minWidth) ? Width : minWidth;
 
 	glfwSetWindowSize(window, this->Width, this->Height);
-	this->windowPanel.setWidth(this->Width, SIZE_PIXEL);
+	windowPanel.setWidth(this->Width, SIZE_PIXEL);
+
+	ResizeWindow(this->Width, this->Height);
 }
 
 void Window::setMinWidth(const GLfloat minWidth) {
 	this->minWidth = minWidth;
-	if(this->minWidth > this->Width) this->setWidth(this->minWidth);
+	windowPanel.setMinWidth(this->minWidth, SIZE_PIXEL);
+
+	if(this->minWidth > Width) setWidth(this->minWidth);
 
 	glfwSetWindowSizeLimits(window, this->minWidth, this->minHeight, GLFW_DONT_CARE, GLFW_DONT_CARE);
-	this->windowPanel.setMinWidth(minWidth, SIZE_PIXEL);
 }
 
 const GLfloat Window::getHeight() {
-	return this->Height;
+	return Height;
 }
 
 const GLfloat Window::getMinHeight() {
-	return this->minHeight;
+	return minHeight;
 }
 
 void Window::setHeight(const GLfloat Height) {
-	this->Height = (Height >= this->minHeight) ? Height : this->minHeight;
-
-	this->ResizeWindow(this->Width, this->Height);
+	this->Height = (Height >= minHeight) ? Height : minHeight;
 
 	glfwSetWindowSize(window, this->Width, this->Height);
-	this->windowPanel.setHeight(this->Height, SIZE_PIXEL);
+	windowPanel.setHeight(this->Height, SIZE_PIXEL);
+
+	ResizeWindow(this->Width, this->Height);
 }
 
 void Window::setMinHeight(const GLfloat minHeight) {
 	this->minHeight = minHeight;
-	if(this->minHeight > this->Height) this->setHeight(this->minHeight);
+	windowPanel.setMinHeight(this->minHeight, SIZE_PIXEL);
+
+	if(this->minHeight > Height) setHeight(this->minHeight);
 
 	glfwSetWindowSizeLimits(window, this->minWidth, this->minHeight, GLFW_DONT_CARE, GLFW_DONT_CARE);
-	this->windowPanel.setMinHeight(minHeight, SIZE_PIXEL);
 }
 
 void Window::addPanel(Panel* panel) {
-	this->windowPanel.addPanel(panel);
+	windowPanel.addPanel(panel);
 }
 
 void Window::addPanelQuad(PanelQuad* pQuad) {
@@ -241,7 +243,6 @@ void Window::updateVertices(int n_quad) {
 			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(data)), sizeof(data), &data);
 		}
 	} else {
-		// Clear PanelQuad
 		for(int v = 0; v < 4; v++) {
 			GLfloat data[2] = {0.0, 0.0};
 			glBufferSubData(GL_ARRAY_BUFFER, n_quad * sizeof(GLfloat) * 24 + (v * sizeof(GLfloat) * 6), sizeof(data), &data);
