@@ -191,19 +191,64 @@ void Panel::setPosY(const GLfloat y, const SizeType sizeType) {
 	updatePanelChildren(this);
 }
 
-const std::array<GLfloat, 4> Panel::getAlignments() {
+const std::array<Align, 4> Panel::getAlignments() {
 	return pQuad.alignments;
 }
 
-void Panel::addAlignment(Alignment alignment, const GLfloat offset) {
-	pQuad.alignments[alignment] = offset;
-
-	updatePanelChildren(this);
+const bool Panel::hasAlign(const Alignment alignment) {
+	return (alignment != ALIGN_NONE) ? pQuad.alignments[alignment].alignType != ALIGN_NONE : false;
 }
 
-void Panel::setColor(GLfloat color[4]) {
-	for(int i = 0; i < 4; i++)
-		pQuad.quadColor[i] = color[i];
+const GLfloat Panel::getAlign(const Alignment alignment) {
+	if(alignment != ALIGN_NONE) {
+		Align& align = pQuad.alignments[alignment];
+
+		if(align.alignType == ALIGN_TOP || align.alignType == ALIGN_BOTTOM)
+			return (align.sizeType == SIZE_PIXEL) ? align.offset : (panelParent->getHeight() / 100) * align.offset;
+		else if (align.alignType == ALIGN_LEFT || align.alignType == ALIGN_RIGHT)
+			return (align.sizeType == SIZE_PIXEL) ? align.offset : (panelParent->getWidth() / 100) * align.offset;
+	}
+}
+
+void Panel::setAlign(const Alignment alignment, const GLfloat offset, const SizeType sizeType) {
+	if(alignment != ALIGN_NONE) {
+		pQuad.alignments[alignment] = { offset, sizeType, alignment };
+
+		updatePanelChildren(this);
+	}
+}
+
+const std::array<GLfloat, 4> Panel::getColor() {
+	return pQuad.color;
+}
+
+void Panel::setColor(const std::array<GLfloat, 4> color) {
+	pQuad.color = color;
+
+	updatePanel();
+}
+
+void Panel::setColor(const GLfloat color[4]) {
+	pQuad.color = { color[0], color[1], color[2], color[3] };
+
+	updatePanel();
+}
+
+void Panel::setColor(const std::string htmlColor) {
+	GLfloat colorBase[3] = { 0.0, 0.0, 0.0 };
+	int c = 0, offset = 0, index = 0;
+	
+	for(; c < htmlColor.size() && index <= 2; c++, index = (c - offset) / 2) {
+		if(htmlColor[c] == '#') {
+			offset++; 
+			continue;
+		}
+
+		int val = isdigit(htmlColor[c]) ? htmlColor[c] - '0' : (tolower(htmlColor[c]) >= 'a' && tolower(htmlColor[c]) <= 'f') ? tolower(htmlColor[c]) - 'a' + 10 : 0;
+		colorBase[index] = !((c - offset) % 2) ? val * 16 : colorBase[index] + val;
+	}
+
+	pQuad.color = { colorBase[0] / 255.0f, colorBase[1] / 255.0f, colorBase[2] / 255.0f, 1.0 };
 
 	updatePanel();
 }
@@ -231,30 +276,30 @@ void Panel::updatePanelQuad(Panel* pParent, Panel* panel) {
 	 */
 
 	 //Top Line
-	if(panel->pQuad.alignments[ALIGN_TOP] != -1)
-		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->pQuad.alignments[ALIGN_TOP];
-	else if(panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
-		panel->pQuad.lines[0] = ((pParent->pQuad.lines[0] + pParent->getHeight()) - panel->pQuad.alignments[ALIGN_BOTTOM]) - panel->getHeight(VALUE_SETTED);
+	if(panel->hasAlign(ALIGN_TOP))
+		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->getAlign(ALIGN_TOP);
+	else if(panel->hasAlign(ALIGN_BOTTOM))
+		panel->pQuad.lines[0] = ((pParent->pQuad.lines[0] + pParent->getHeight()) - panel->getAlign(ALIGN_BOTTOM)) - panel->getHeight(VALUE_SETTED);
 	else
 		panel->pQuad.lines[0] = pParent->pQuad.lines[0] + panel->getPosY(SIZE_PIXEL, VALUE_SETTED);
 
 	//Bottom Line
-	if(panel->pQuad.alignments[ALIGN_BOTTOM] != -1)
-		panel->pQuad.lines[1] = (pParent->pQuad.lines[0] + pParent->getHeight()) - panel->pQuad.alignments[ALIGN_BOTTOM];
+	if(panel->hasAlign(ALIGN_BOTTOM))
+		panel->pQuad.lines[1] = (pParent->pQuad.lines[0] + pParent->getHeight()) - panel->getAlign(ALIGN_BOTTOM);
 	else
 		panel->pQuad.lines[1] = panel->pQuad.lines[0] + panel->getHeight();
 
 	//Left Line
-	if(panel->pQuad.alignments[ALIGN_LEFT] != -1)
-		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->pQuad.alignments[ALIGN_LEFT];
-	else if(panel->pQuad.alignments[ALIGN_RIGHT] != -1)
-		panel->pQuad.lines[2] = ((pParent->pQuad.lines[2] + pParent->getWidth()) - panel->pQuad.alignments[ALIGN_RIGHT]) - panel->getWidth();
+	if(panel->hasAlign(ALIGN_LEFT))
+		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->getAlign(ALIGN_LEFT);
+	else if(panel->hasAlign(ALIGN_RIGHT))
+		panel->pQuad.lines[2] = ((pParent->pQuad.lines[2] + pParent->getWidth()) - panel->getAlign(ALIGN_RIGHT)) - panel->getWidth();
 	else
 		panel->pQuad.lines[2] = pParent->pQuad.lines[2] + panel->getPosX(SIZE_PIXEL, VALUE_SETTED);
 
 	//Right Line
-	if(panel->pQuad.alignments[ALIGN_RIGHT] != -1)
-		panel->pQuad.lines[3] = (pParent->pQuad.lines[2] + pParent->getWidth()) - panel->pQuad.alignments[ALIGN_RIGHT];
+	if(panel->hasAlign(ALIGN_RIGHT))
+		panel->pQuad.lines[3] = (pParent->pQuad.lines[2] + pParent->getWidth()) - panel->getAlign(ALIGN_RIGHT);
 	else
 		panel->pQuad.lines[3] = panel->pQuad.lines[2] + panel->getWidth();
 

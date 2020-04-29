@@ -228,7 +228,7 @@ void Window::updateVertices(int n_quad) {
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 
 	if(panelsQuad[n_quad]->visible) {
-		GLfloat* color = panelsQuad[n_quad]->quadColor;
+		std::array<GLfloat, 4> color = panelsQuad[n_quad]->color;
 		std::array<GLfloat, 4> lines = panelsQuad[n_quad]->lines;
 
 		std::vector<GLfloat> vertex = {

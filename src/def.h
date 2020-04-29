@@ -207,16 +207,14 @@ enum Actions {
 	REPEAT
 };
 
-
-
 /* ALIGNMENT */
 enum Alignment {
 	ALIGN_TOP,
 	ALIGN_BOTTOM,
 	ALIGN_LEFT,
-	ALIGN_RIGHT
+	ALIGN_RIGHT,
+	ALIGN_NONE
 };
-
 
 /* PANEL */
 enum PanelType {

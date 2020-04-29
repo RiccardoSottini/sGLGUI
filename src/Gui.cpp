@@ -12,6 +12,10 @@ void Gui::EventLoop() {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))->setSize(Width, Height);
 	};
 
+	for(int i = 0; i < windows.size(); i++) {
+		windows[i]->Display();
+	}
+
     while(true) {
         glfwPollEvents();
         //InputEvent inputEvent(this);
@@ -25,7 +29,7 @@ void Gui::EventLoop() {
             if(offsetWidth || offsetHeight)
                 windows[i]->ResizeWindow(offsetWidth, offsetHeight);*/
 
-			windows[i]->Display();
+			//windows[i]->Display();
 
             /*glfwSetKeyCallback(windows[i]->getWindow(), inputEvent.KeyCallBack);
             glfwSetCharCallback(windows[i]->getWindow(), inputEvent.CharCallBack);

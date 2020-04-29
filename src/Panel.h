@@ -5,12 +5,18 @@
 
 #include <string>
 
+struct Align {
+	GLfloat		offset;
+	SizeType	sizeType;
+	Alignment	alignType = ALIGN_NONE;
+};
+
 struct PanelQuad {
 	bool visible = true;	//by default the panel is visible
 	int n_quad = -1;		//by default the panel is not binded with a window
-	GLfloat quadColor[4] { 0.941176, 0.941176, 0.941176, 1.0 };	//default panel color
-	std::array<GLfloat, 4> alignments = { -1, -1, -1, -1 };		//default panel alignments (-1, -1, -1, -1) -> no alignments setted
-	std::array<GLfloat, 4> lines = { 0.0, 0.0, 0.0, 0.0 };		//default panel lines to make the Quad
+	std::array<GLfloat, 4> color = { 0.941176, 0.941176, 0.941176, 1.0 };	//default panel color
+	std::array<Align, 4> alignments;										
+	std::array<GLfloat, 4> lines = { 0.0, 0.0, 0.0, 0.0 };					//default panel lines to make the Quad
 };
 
 class Panel {
@@ -62,11 +68,16 @@ class Panel {
 		void setPosY(const GLfloat y, const SizeType sizeType);
 
 		/* Alignments (ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT) */
-		const std::array<GLfloat, 4> getAlignments();
-		void addAlignment(const Alignment alignment, const GLfloat offset);
+		const std::array<Align, 4> getAlignments();
+		const bool hasAlign(const Alignment alignment);
+		const GLfloat getAlign(const Alignment alignment);
+		void setAlign(const Alignment alignment, const GLfloat offset, const SizeType sizeType);
 
 		/* Color */
-		void setColor(GLfloat color[4]);
+		const std::array<GLfloat, 4> getColor();
+		void setColor(const GLfloat color[4]);
+		void setColor(const std::array<GLfloat, 4> color);
+		void Panel::setColor(const std::string htmlColor);
 
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};
