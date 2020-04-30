@@ -30,12 +30,14 @@ int main() {
 	gui->connect(&w, Signal(INPUT_MOUSE_BUTTON, MOUSE_BUTTON_LEFT, PRESS), &e_mousebutton);
 	gui->connect(&w, Signal(INPUT_SCROLL), &e_scroll);
 
-	std::array<Align, 4> vec_alignments = w.getWindowPanel()->getAlignments();
+	/*std::array<Align, 4> vec_alignments = w.getWindowPanel()->getAlignments();
 	for(int i = 0; i < vec_alignments.size(); i++)
-		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].offset << '\n';
+		std::cout << "Alignment[" << i << "]: " << vec_alignments[i].offset << '\n';*/
 
 	w.setMinWidth(200);
 	w.setMinHeight(200);
+	//w.setMaxWidth(600);
+	//w.setMaxHeight(600);
 
 	Panel p(&w);
 	p.setPosition(10, 10, SIZE_PERCENT);
@@ -60,7 +62,9 @@ int main() {
 	p4.setAlign(ALIGN_BOTTOM, 10, SIZE_PERCENT);
 	p4.setAlign(ALIGN_RIGHT, 10, SIZE_PERCENT);
 	p4.setSize(80, 80, SIZE_PERCENT);
-	p4.setColor("#6767ff");
+	p4.setHexColor("#6767ff");
+
+	std::cout << p4.getHexColor() << std::endl;
 
 	Panel p5(&p4);
 	p5.setAlign(ALIGN_BOTTOM, 0, SIZE_PIXEL);

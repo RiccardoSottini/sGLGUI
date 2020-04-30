@@ -75,9 +75,10 @@ class Panel {
 
 		/* Color */
 		const std::array<GLfloat, 4> getColor();
+		const std::string getHexColor();
 		void setColor(const GLfloat color[4]);
 		void setColor(const std::array<GLfloat, 4> color);
-		void Panel::setColor(const std::string htmlColor);
+		void Panel::setHexColor(const std::string hexColor);
 
 		std::map<std::array<int, 3>, void(*)()> slots;
 		std::vector<Panel*> list{};

@@ -222,6 +222,17 @@ const std::array<GLfloat, 4> Panel::getColor() {
 	return pQuad.color;
 }
 
+const std::string Panel::getHexColor() {
+	std::string hexColor = "#";
+
+	for(int c = 0, index = 0; c < 6; c++, index = c / 2) {
+		int val = (!(c % 2)) ? (pQuad.color[index] * 255) / 16 : (int)(pQuad.color[index] * 255) % 16;
+		hexColor += (val < 10) ? val + '0' : (val - 10) + 'a';
+	}
+
+	return hexColor;
+}
+
 void Panel::setColor(const std::array<GLfloat, 4> color) {
 	pQuad.color = color;
 
@@ -234,17 +245,17 @@ void Panel::setColor(const GLfloat color[4]) {
 	updatePanel();
 }
 
-void Panel::setColor(const std::string htmlColor) {
+void Panel::setHexColor(const std::string hexColor) {
 	GLfloat colorBase[3] = { 0.0, 0.0, 0.0 };
 	int c = 0, offset = 0, index = 0;
 	
-	for(; c < htmlColor.size() && index <= 2; c++, index = (c - offset) / 2) {
-		if(htmlColor[c] == '#') {
+	for(; c < hexColor.size() && index <= 2; c++, index = (c - offset) / 2) {
+		if(hexColor[c] == '#') {
 			offset++; 
 			continue;
 		}
 
-		int val = isdigit(htmlColor[c]) ? htmlColor[c] - '0' : (tolower(htmlColor[c]) >= 'a' && tolower(htmlColor[c]) <= 'f') ? tolower(htmlColor[c]) - 'a' + 10 : 0;
+		int val = isdigit(hexColor[c]) ? hexColor[c] - '0' : (tolower(hexColor[c]) >= 'a' && tolower(hexColor[c]) <= 'f') ? tolower(hexColor[c]) - 'a' + 10 : 0;
 		colorBase[index] = !((c - offset) % 2) ? val * 16 : colorBase[index] + val;
 	}
 

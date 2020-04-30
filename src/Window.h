@@ -30,13 +30,13 @@ class Window {
 		const GLfloat getWidth();
 		const GLfloat getMinWidth();
 		void setWidth(const GLfloat Width);
-		void setMinWidth(const GLfloat Width);
+		void setMinWidth(const GLfloat minWidth);
 
 		/* Height */
 		const GLfloat getHeight();
 		const GLfloat getMinHeight();
 		void setHeight(const GLfloat Height);
-		void setMinHeight(const GLfloat Height);
+		void setMinHeight(const GLfloat minHeight);
 
 		/* Panel */
 		void addPanel(Panel* panel);
